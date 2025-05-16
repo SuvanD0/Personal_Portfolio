@@ -1,21 +1,15 @@
 import { Briefcase, Building, Code, Database, Factory, Globe, Landmark, MessageSquare, PenTool, Play, Github, Linkedin, Twitter, Mail } from 'lucide-react';
 
-export interface WorkExperience {
-  logo: typeof Briefcase;
-  company: string;
-  role: string;
-  period: string;
-  location?: string;
-  description: string;
-  tags: string[];
-}
-
-export interface Project {
-  logo: typeof PenTool;
-  title: string;
-  description: string;
-  year: string;
+export interface RoleCardData {
+  logo?: any;
+  title?: string;
+  company?: string;
+  role?: string;
+  year?: string;
+  period?: string;
   link?: string;
+  location?: string;
+  description?: string;
   details?: string;
   tags?: string[];
 }
@@ -26,15 +20,23 @@ export interface PersonalLink {
   url: string;
 }
 
-export const workExperiences: WorkExperience[] = [
+export interface AlbumData {
+  title: string;
+  artist: string;
+  year: string;
+  coverUrl: string;
+  link?: string;
+}
+
+export const workExperiences: RoleCardData[] = [
   {
     logo: Building,
-    company: "Snap Inc.",
-    role: "Incoming Software Engineer Intern",
+    company: "Amazon",
+    role: "Incoming Software Development Engineer Intern",
     period: "Summer 2025",
     location: "Seattle, WA",
-    description: "Snap AR/VR Infra Team",
-    tags: ["Augmented Reality"]
+    description: "AWS Bedrock",
+    tags: ["Java"]
   },
   {
     logo: Landmark,
@@ -74,7 +76,7 @@ export const workExperiences: WorkExperience[] = [
   }
 ];
 
-export const projects: Project[] = [
+export const projects: RoleCardData[] = [
   {
     logo: Globe,
     title: "WikiMedia (Wikipedia)",
@@ -113,12 +115,12 @@ export const personalLinks: PersonalLink[] = [
   {
     title: "GitHub",
     description: "Connect with me on GitHub",
-    url: "https://github.com/yourusername"
+    url: "https://github.com/SuvanD0"
   },
   {
     title: "LinkedIn",
     description: "Connect with me on LinkedIn",
-    url: "https://linkedin.com/in/yourusername"
+    url: "https://www.linkedin.com/in/suvan-dommeti/"
   },
   {
     title: "Twitter",
@@ -128,6 +130,65 @@ export const personalLinks: PersonalLink[] = [
   {
     title: "Email",
     description: "Get in touch via email",
-    url: "mailto:your.email@example.com"
+    url: "mailto:suvandommeti0@gmail.com"
+  }
+];
+
+export const albums: AlbumData[] = [
+  {
+    title: "Blonde",
+    artist: "Frank Ocean",
+    year: "2016",
+    coverUrl: "/albums/blonde.jpg",
+    link: "https://open.spotify.com/album/3mH6qwIy9crq0I9YQbOuDf"
+  },
+  {
+    title: "IGOR",
+    artist: "Tyler, The Creator",
+    year: "2019",
+    coverUrl: "/albums/igor.jpg",
+    link: "https://open.spotify.com/album/5zi7WsKlIiUXv09tbGLKsE"
+  },
+  {
+    title: "Madvillainy",
+    artist: "Madvillain",
+    year: "2004",
+    coverUrl: "/albums/madvillainy.jpg",
+    link: "https://open.spotify.com/album/19bQiwEKhXUBJWY6oV3KZk"
+  },
+  {
+    title: "To Pimp a Butterfly",
+    artist: "Kendrick Lamar",
+    year: "2015",
+    coverUrl: "/albums/tpab.jpg",
+    link: "https://open.spotify.com/album/7ycBtnsMtyVbbwTfJwRjSP"
+  },
+  {
+    title: "The Life of Pablo",
+    artist: "Kanye West",
+    year: "2016",
+    coverUrl: "/albums/tlop.jpg",
+    link: "https://open.spotify.com/album/7gsWAHLeT0w7es6FofOXk1"
+  },
+  {
+    title: "Channel Orange",
+    artist: "Frank Ocean",
+    year: "2012",
+    coverUrl: "/albums/channel-orange.jpg",
+    link: "https://open.spotify.com/album/392p3shh2jkxUxY2VHvlH8"
+  },
+  {
+    title: "My Beautiful Dark Twisted Fantasy",
+    artist: "Kanye West",
+    year: "2010",
+    coverUrl: "/albums/mbdtf.jpg",
+    link: "https://open.spotify.com/album/20r762YmB5HeofjMCiPMLv"
+  },
+  {
+    title: "good kid, m.A.A.d city",
+    artist: "Kendrick Lamar",
+    year: "2012",
+    coverUrl: "/albums/gkmc.jpg",
+    link: "https://open.spotify.com/album/6PBZN8cbwkqm1ERj2BGXJ1"
   }
 ];

@@ -1,30 +1,32 @@
-
-import { useEffect } from 'react';
+import { useState } from 'react';
 import Header from '@/components/Header';
 import RoleCard from '@/components/RoleCard';
-import ProjectCard from '@/components/ProjectCard';
 import SectionTitle from '@/components/SectionTitle';
-import LinkCard from '@/components/LinkCard';
-import { useTheme } from '@/hooks/useTheme';
-import { workExperiences, projects, personalLinks } from '@/data/portfolioData';
+import EyesOverlay from '@/components/EyesOverlay';
+import { workExperiences, projects, albums } from '@/data/portfolioData';
 
 const Index = () => {
-  const { theme } = useTheme();
+  const [showEyes, setShowEyes] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
 
-  // Add light/dark mode class to body on initial load
-  useEffect(() => {
-    if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
+  const triggerEyesOverlay = () => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const imgWidth = 300;
+    const imgHeight = 200;
+    const left = Math.random() * (vw - imgWidth);
+    const top = Math.random() * (vh - imgHeight);
+    setPosition({ top, left });
+    setShowEyes(true);
+    setTimeout(() => setShowEyes(false), 2000);
+  };
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
-      <Header />
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-100">
+      <EyesOverlay show={showEyes} position={position} />
+      <Header onLightMode={triggerEyesOverlay} />
       
-      <main className="max-w-3xl mx-auto px-6 py-12 space-y-16">
+      <main className="max-w-3xl mx-auto px-6 py-6 space-y-16">
         {/* Introduction */}
         <section className="mb-8">
           <div className="mb-6">
@@ -73,7 +75,7 @@ const Index = () => {
           
           <div className="space-y-2">
             {projects.map((project, index) => (
-              <ProjectCard 
+              <RoleCard 
                 key={index}
                 logo={<project.logo className="h-4 w-4" />}
                 title={project.title}
@@ -87,33 +89,30 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Personal Links */}
+        {/* Albums Section */}
         <section>
-          <SectionTitle title="Personal Projects" />
+          <SectionTitle title="Favorite Albums" />
           
-          <div className="space-y-2">
-            {personalLinks.map((link, index) => (
-              <LinkCard 
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {albums.map((album, index) => (
+              <a
                 key={index}
-                title={link.title}
-                description={link.description}
-                url={link.url}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* Favorite Films Section */}
-        <section>
-          <SectionTitle title="Favorite Films" />
-          
-          <div className="grid grid-cols-4 gap-3">
-            {/* Film placeholders */}
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-              <div 
-                key={item} 
-                className="bg-muted aspect-[2/3] rounded-sm hover-transition hover-float"
-              />
+                href={album.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative aspect-square overflow-hidden rounded-lg bg-muted hover:scale-105 transition-transform duration-300"
+              >
+                <img
+                  src={album.coverUrl}
+                  alt={`${album.title} by ${album.artist}`}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
+                  <h3 className="text-white font-semibold text-sm">{album.title}</h3>
+                  <p className="text-white/80 text-xs">{album.artist}</p>
+                  <p className="text-white/60 text-xs">{album.year}</p>
+                </div>
+              </a>
             ))}
           </div>
         </section>

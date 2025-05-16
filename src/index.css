@@ -6,7 +6,7 @@
   :root {
     /* Light mode colors (default) */
     --background: 0 0% 100%; /* White (#FFFFFF) */
-    --foreground: 0 0% 13%; /* Dark gray/near black (#222222) */
+    --foreground: 222.2 84% 4.9%; /* Dark gray/near black (#222222) */
     --card: 0 0% 100%;
     --card-foreground: 0 0% 13%;
     --popover: 0 0% 100%;
@@ -61,6 +61,14 @@
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, 
                  "Helvetica Neue", Arial, sans-serif;
     font-weight: 600;
+  }
+
+  * {
+    @apply transition-colors duration-100;
+  }
+
+  body {
+    @apply transition-colors duration-100;
   }
 }
 
