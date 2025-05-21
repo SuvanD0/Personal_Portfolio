@@ -135,56 +135,56 @@ export const albums: AlbumData[] = [
     title: "Beta",
     artist: "Peter Cat Recording Co.",
     year: "2024",
-    coverUrl: "src/assets/albums/Beta.jpg",
+    coverUrl: "/albums/Beta.jpg",
     link: "https://open.spotify.com/album/5RyDQJIkTOl0QMeFZz8UGe"
   },
   {
     title: "Bread",
     artist: "The Alchemist",
     year: "2018",
-    coverUrl: "src/assets/albums/Bread.jpg",
+    coverUrl: "/albums/Bread.jpg",
     link: "https://open.spotify.com/album/6HB5Nq7lSjvTs3gJom6BXI"
   },
   {
     title: "Either/Or",
     artist: "Elliott Smith",
     year: "1997",
-    coverUrl: "src/assets/albums/Either_Or.jpg",
+    coverUrl: "/albums/Either_Or.jpg",
     link: "https://open.spotify.com/album/5bmpvyP7UGqB4VuXmrJUMy"
   },
   {
     title: "England Made Me",
     artist: "Black Box Recorder",
     year: "1998",
-    coverUrl: "src/assets/albums/England_Made_Me.jpg",
+    coverUrl: "/albums/England_Made_Me.jpg",
     link: "https://open.spotify.com/album/1PVtgkCZPW8AVll0gKsHDS"
   },
   {
     title: "Folklore",
     artist: "Taylor Swift",
     year: "2020",
-    coverUrl: "src/assets/albums/Folklore.jpg",
+    coverUrl: "/albums/Folklore.jpg",
     link: "https://open.spotify.com/album/2fenSS68JI1h4Fo296JfGr"
   },
   {
     title: "In Rainbows",
     artist: "Radiohead",
     year: "2007",
-    coverUrl: "src/assets/albums/In_Rainbows.jpg",
+    coverUrl: "/albums/In_Rainbows.jpg",
     link: "https://open.spotify.com/album/5vkqYmiPBYLaalcmjujWxK"
   },
   {
     title: "Pink Moon",
     artist: "Nick Drake",
     year: "1972",
-    coverUrl: "src/assets/albums/Pink_Moon.jpg",
+    coverUrl: "/albums/Pink_Moon.jpg",
     link: "https://open.spotify.com/album/5mwOo1zikswhmfHvtqVSXg"
   },
   {
     title: "Vampire Weekend",
     artist: "Vampire Weekend",
     year: "2008",
-    coverUrl: "src/assets/albums/Vampire_Weekend.jpg",
+    coverUrl: "/albums/Vampire_Weekend.jpg",
     link: "https://open.spotify.com/album/7n8NJkGKAl2np1bXiRn0CY"
   }
 ];
