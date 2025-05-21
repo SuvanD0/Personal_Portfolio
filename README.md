@@ -1,4 +1,14 @@
-# Welcome to your Lovable project
+# Suvan Dommeti Portfolio Website
+
+This is the personal portfolio website for Suvan Dommeti. It showcases my work experience, projects, and contact information. The site is built with modern web technologies and serves as a central place to learn more about me and my professional background.
+
+## Technologies Used
+
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn-ui
+- Vite
 
 ## Project info
 
@@ -49,16 +59,6 @@ npm run dev
 - Select the "Codespaces" tab.
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
 
 ## How can I deploy this project?
 
