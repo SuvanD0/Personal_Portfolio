@@ -11,7 +11,7 @@
     --card-foreground: 0 0% 13%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 13%;
-    --primary: 0 0% 13%; /* Changed to Dark gray/near black (#222222) instead of blue */
+    --primary: 0 0% 13%; /* Dark gray/near black (#222222) */
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 93%; /* Light gray (#EEEEEE) */
     --secondary-foreground: 0 0% 13%;
@@ -23,31 +23,31 @@
     --destructive-foreground: 0 0% 100%;
     --border: 0 0% 93%; /* Light gray (#EEEEEE) */
     --input: 0 0% 93%;
-    --ring: 0 0% 13%; /* Changed to Dark gray/near black (#222222) instead of blue */
+    --ring: 0 0% 13%; /* Dark gray/near black (#222222) */
     --radius: 0.5rem;
   }
 
   .dark {
-    /* Dark mode colors */
-    --background: 240 7% 17%; /* Dark blue-gray (#26262E) - RGB(26, 26, 30) */
-    --foreground: 0 0% 60%; /* Light gray (#9A9A9A) - RGB(154, 154, 154) */
-    --card: 240 8% 20%;
-    --card-foreground: 0 0% 60%;
-    --popover: 240 8% 20%;
-    --popover-foreground: 0 0% 60%;
-    --primary: 0 0% 60%; /* Changed to Light gray (#9A9A9A) instead of blue */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 20%; /* Dark gray (#333333) */
-    --secondary-foreground: 0 0% 60%;
-    --muted: 0 0% 20%;
-    --muted-foreground: 0 0% 50%;
-    --accent: 0 0% 20%;
-    --accent-foreground: 0 0% 60%;
+    /* Dark mode colors - inverted hierarchy from light mode */
+    --background: 0 0% 16%; /* Dark gray (#2a2a2a) */
+    --foreground: 0 0% 93%; /* Light gray (#EEEEEE) - inverted from light mode's dark text */
+    --card: 0 0% 20%; /* Slightly lighter than background */
+    --card-foreground: 0 0% 93%;
+    --popover: 0 0% 20%;
+    --popover-foreground: 0 0% 93%;
+    --primary: 0 0% 93%; /* Light gray (#EEEEEE) - inverted from light mode's primary */
+    --primary-foreground: 0 0% 13%;
+    --secondary: 0 0% 25%; /* Slightly lighter than background */
+    --secondary-foreground: 0 0% 93%;
+    --muted: 0 0% 25%;
+    --muted-foreground: 0 0% 60%; /* Medium gray - inverted from light mode */
+    --accent: 0 0% 25%;
+    --accent-foreground: 0 0% 93%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 20%; /* Dark gray (#333333) */
-    --input: 0 0% 20%;
-    --ring: 0 0% 60%; /* Changed to Light gray (#9A9A9A) instead of blue */
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 0 0% 93%;
   }
   
   /* Add font configuration */
@@ -61,6 +61,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, 
                  "Helvetica Neue", Arial, sans-serif;
     font-weight: 600;
+    @apply text-foreground;
   }
 
   * {
@@ -73,9 +74,6 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
@@ -141,6 +139,6 @@
   }
   
   .heading {
-    @apply text-primary font-semibold tracking-tight;
+    @apply text-foreground font-semibold tracking-tight;
   }
 }

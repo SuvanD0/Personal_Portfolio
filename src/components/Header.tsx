@@ -1,6 +1,13 @@
 import { Github, Linkedin, Mail } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import IconLink from './IconLink';
+import { personalLinks } from '../data/portfolioData';
+
+const iconMap: Record<string, JSX.Element> = {
+  'GitHub': <Github className="h-4 w-4" />,
+  'LinkedIn': <Linkedin className="h-4 w-4" />,
+  'Email': <Mail className="h-4 w-4" />,
+};
 
 const Header = ({ onLightMode }: { onLightMode?: () => void }) => {
   return (
@@ -8,21 +15,14 @@ const Header = ({ onLightMode }: { onLightMode?: () => void }) => {
       <h1 className="text-xl font-semibold tracking-tight">Suvan Dommeti</h1>
       
       <div className="flex items-center space-x-3">
-        <IconLink 
-          href="https://github.com" 
-          icon={<Github className="h-4 w-4" />} 
-          label="GitHub"
-        />
-        <IconLink 
-          href="https://linkedin.com" 
-          icon={<Linkedin className="h-4 w-4" />} 
-          label="LinkedIn"
-        />
-        <IconLink 
-          href="mailto:your-email@example.com" 
-          icon={<Mail className="h-4 w-4" />} 
-          label="Email"
-        />
+        {personalLinks.map(link => (
+          <IconLink
+            key={link.title}
+            href={link.url}
+            icon={iconMap[link.title] || <Github className="h-4 w-4" />}
+            label={link.title}
+          />
+        ))}
         <ThemeToggle onLightMode={onLightMode} />
       </div>
     </header>
