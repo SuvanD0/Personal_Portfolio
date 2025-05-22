@@ -1,7 +1,13 @@
+import React from 'react';
 import { Briefcase, Building, Code, Database, Factory, Globe, Landmark, MessageSquare, PenTool, Play, Github, Linkedin, Twitter, Mail } from 'lucide-react';
+import AmazonLogo from '@/assets/logos/companies/Amazon.png';
+import JPMorganLogo from '@/assets/logos/companies/JPMorgan.png';
+import BlueBonnetLogo from '@/assets/logos/companies/BlueBonnetData.jpg';
+import NorthwestLogo from '@/assets/logos/companies/NorthwestBank.png';
+import WillowTreeLogo from '@/assets/logos/companies/WillowTree.jpg';
 
 export interface RoleCardData {
-  logo?: any;
+  logo?: React.ReactNode;
   title?: string;
   company?: string;
   role?: string;
@@ -28,9 +34,22 @@ export interface AlbumData {
   link?: string;
 }
 
+const createLogo = (src: string, alt: string) => {
+  return React.createElement('img', {
+    src,
+    alt,
+    style: {
+      width: '32px',
+      height: '32px',
+      objectFit: 'contain',
+      borderRadius: '8px'
+    }
+  });
+};
+
 export const workExperiences: RoleCardData[] = [
   {
-    logo: Building,
+    logo: createLogo(AmazonLogo, "Amazon Logo"),
     company: "Amazon",
     role: "Incoming Software Development Engineer Intern",
     period: "Summer 2025",
@@ -39,7 +58,7 @@ export const workExperiences: RoleCardData[] = [
     tags: ["Java", "Go", "Distributed Systems", "Traffic Engineering"]
   },
   {
-    logo: Landmark,
+    logo: createLogo(JPMorganLogo, "J.P. Morgan Logo"),
     company: "J.P. Morgan Chase",
     role: "Software Engineer Intern",
     period: "Summer/Fall 2024",
@@ -48,7 +67,7 @@ export const workExperiences: RoleCardData[] = [
     tags: ["TypeScript/JavaScript", "Next.js", "React", "Splunk", "AWS", "Jenkins", "Kafka", "Cloud Foundry"]
   },
   {
-    logo: Database,
+    logo: createLogo(BlueBonnetLogo, "BlueBonnet Data Logo"),
     company: "BlueBonnet Data",
     role: "Product Analytics Intern",
     period: "Spring/Summer 2024",
@@ -57,7 +76,7 @@ export const workExperiences: RoleCardData[] = [
     tags: ["Python", "A/B Testing", "Data Analysis", "SQL", "React", "Behavioral Analytics", "TypeScript"]
   },
   {
-    logo: Factory,
+    logo: createLogo(NorthwestLogo, "Northwest Bank Logo"),
     company: "Northwest Bancshares",
     role: "Software Engineer/Product Management Intern",
     period: "Fall 2023",
@@ -66,7 +85,7 @@ export const workExperiences: RoleCardData[] = [
     tags: ["AI", "Azure", "Kubernetes", "Product Management", "Data Analytics"]
   },
   {
-    logo: Briefcase,
+    logo: createLogo(WillowTreeLogo, "WillowTree Logo"),
     company: "WillowTree Apps",
     role: "Software Engineer Intern",
     period: "Summer 2023",
@@ -76,9 +95,13 @@ export const workExperiences: RoleCardData[] = [
   }
 ];
 
+const createIcon = (Icon: any) => {
+  return React.createElement(Icon, { className: "h-8 w-8" });
+};
+
 export const projects: RoleCardData[] = [
   {
-    logo: Globe,
+    logo: createIcon(Globe),
     title: "WikiMedia (Wikipedia)",
     description: "ML Retention/Engagement Pipeline",
     year: "2024 - Present",
@@ -86,7 +109,7 @@ export const projects: RoleCardData[] = [
     tags: ["Jira", "PyTorch", "Amplitude", "Machine Learning", "Agile"]
   },
   {
-    logo: Landmark,
+    logo: createIcon(Landmark),
     title: "Research @ Yale Law Eviction Lab",
     description: "Research Project at Yale",
     year: "2024 - Present",
@@ -94,7 +117,7 @@ export const projects: RoleCardData[] = [
     tags: ["Pandas", "NumPy", "TensorFlow", "Python", "SQL", "Data Science"]
   },
   {
-    logo: MessageSquare,
+    logo: createIcon(MessageSquare),
     title: "Group Me Spam Detection",
     description: "Hackathon Project - HackI/O 2023",
     year: "2023 - Present",
@@ -103,7 +126,7 @@ export const projects: RoleCardData[] = [
     link: "https://github.com/SuvanD0/groupme-spam-bot"
   },
   {
-    logo: PenTool,
+    logo: createIcon(PenTool),
     title: "The Colors of You",
     description: "Personal Project",
     year: "2023",

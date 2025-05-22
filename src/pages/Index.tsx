@@ -35,16 +35,16 @@ const Index = () => {
               Welcome to My Portfolio
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              I’m a student exploring engineering, product, and the systems that connect them.
+              I'm a student exploring engineering, product, and the systems that connect them.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              I’ve built software at startups and large companies—sometimes to ship fast, sometimes to scale, always to solve something real. I'm especially drawn to tools that simplify workflows, surface insight, or make good ideas easier to act on.
+              I've built software at startups and large companies—sometimes to ship fast, sometimes to scale, always to solve something real. I'm especially drawn to tools that simplify workflows, surface insight, or make good ideas easier to act on.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              Right now, I’m learning everything I can from the people building the next generation of products—from internal developer platforms to AI tooling.
+              Right now, I'm learning everything I can from the people building the next generation of products from internal developer platforms to AI tooling.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              I spend my time between Columbus, New York, and San Francisco. Outside of work, I’m usually watching movies, wandering through museums, or finding new places to eat with friends.
+              I spend my time between Columbus, New York, and San Francisco. Outside of work, I'm usually watching movies, wandering through museums, or finding new places to eat with friends.
             </p>
           </div>
         </section>
@@ -60,7 +60,7 @@ const Index = () => {
             {workExperiences.map((experience, index) => (
               <RoleCard 
                 key={index}
-                logo={<experience.logo className="h-4 w-4" />}
+                logo={experience.logo}
                 company={experience.company}
                 role={experience.role}
                 period={experience.period}
@@ -80,7 +80,7 @@ const Index = () => {
             {projects.map((project, index) => (
               <RoleCard 
                 key={index}
-                logo={<project.logo className="h-4 w-4" />}
+                logo={project.logo}
                 title={project.title}
                 description={project.description}
                 year={project.year}
