@@ -1,10 +1,13 @@
 import React from 'react';
 import { Briefcase, Building, Code, Database, Factory, Globe, Landmark, MessageSquare, PenTool, Play, Github, Linkedin, Twitter, Mail } from 'lucide-react';
-import AmazonLogo from '@/assets/logos/companies/Amazon.png';
+import AmazonLogo from '@/assets/logos/companies/Amazon.jpg';
 import JPMorganLogo from '@/assets/logos/companies/JPMorgan.png';
 import BlueBonnetLogo from '@/assets/logos/companies/BlueBonnetData.jpg';
 import NorthwestLogo from '@/assets/logos/companies/NorthwestBank.png';
 import WillowTreeLogo from '@/assets/logos/companies/WillowTree.jpg';
+import GroupMeLogo from '@/assets/logos/projects/GroupMe.jpg';
+import WikimediaLogo from '@/assets/logos/projects/Wikimedia.png';
+import YaleLawSchoolLogo from '@/assets/logos/projects/YaleLawSchool.png';
 
 export interface RoleCardData {
   logo?: React.ReactNode;
@@ -35,6 +38,19 @@ export interface AlbumData {
 }
 
 const createLogo = (src: string, alt: string) => {
+  return React.createElement('img', {
+    src,
+    alt,
+    style: {
+      width: '32px',
+      height: '32px',
+      objectFit: 'contain',
+      borderRadius: '8px'
+    }
+  });
+};
+
+const createProjectLogo = (src: string, alt: string) => {
   return React.createElement('img', {
     src,
     alt,
@@ -101,7 +117,7 @@ const createIcon = (Icon: any) => {
 
 export const projects: RoleCardData[] = [
   {
-    logo: createIcon(Globe),
+    logo: createProjectLogo(WikimediaLogo, "Wikimedia Logo"),
     title: "WikiMedia (Wikipedia)",
     description: "ML Retention/Engagement Pipeline",
     year: "2024 - Present",
@@ -109,7 +125,7 @@ export const projects: RoleCardData[] = [
     tags: ["Jira", "PyTorch", "Amplitude", "Machine Learning", "Agile"]
   },
   {
-    logo: createIcon(Landmark),
+    logo: createProjectLogo(YaleLawSchoolLogo, "Yale Law School Logo"),
     title: "Research @ Yale Law Eviction Lab",
     description: "Research Project at Yale",
     year: "2024 - Present",
@@ -117,7 +133,7 @@ export const projects: RoleCardData[] = [
     tags: ["Pandas", "NumPy", "TensorFlow", "Python", "SQL", "Data Science"]
   },
   {
-    logo: createIcon(MessageSquare),
+    logo: createProjectLogo(GroupMeLogo, "GroupMe Logo"),
     title: "Group Me Spam Detection",
     description: "Hackathon Project - HackI/O 2023",
     year: "2023 - Present",
