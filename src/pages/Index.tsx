@@ -53,7 +53,7 @@ const Index = () => {
         <section>
           <SectionTitle 
             title="Work Experience" 
-            resumeLink="/src/assets/Dommeti-Suvan-Resume.pdf" 
+            resumeLink="/Dommeti-Suvan-Resume.pdf" 
           />
           
           <div className="space-y-2">

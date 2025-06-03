@@ -66,8 +66,8 @@ const createProjectLogo = (src: string, alt: string) => {
 export const workExperiences: RoleCardData[] = [
   {
     logo: createLogo(AmazonLogo, "Amazon Logo"),
-    company: "Amazon",
-    role: "Incoming Software Development Engineer Intern",
+    company: "Amazon Web Services",
+    role: "Software Development Engineer Intern",
     period: "Summer 2025",
     location: "Seattle, WA",
     description: "Working on request throttling and rate-limiting optimization for AWS Bedrock, aiming to reduce p99 latency by 12% across 20B+ daily API calls.",
