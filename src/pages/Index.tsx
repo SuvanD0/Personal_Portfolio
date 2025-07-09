@@ -89,10 +89,11 @@ const Index = () => {
                 <TiltedCard
                   imageSrc={album.coverUrl}
                   altText={`${album.title} by ${album.artist}`}
-                  containerHeight="140px"
-                  containerWidth="100%"
-                  imageHeight="140px"
-                  imageWidth="140px"
+                  containerHeight="160px"
+                  containerWidth="160px"
+                  imageHeight="160px"
+                  imageWidth="160px"
+                  // Add a thin border
                   scaleOnHover={1.08}
                   rotateAmplitude={14}
                   showMobileWarning={false}
