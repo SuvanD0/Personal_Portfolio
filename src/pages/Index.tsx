@@ -1,31 +1,12 @@
 import { useState } from 'react';
-import Header from '@/components/Header';
 import RoleCard from '@/components/RoleCard';
 import SectionTitle from '@/components/SectionTitle';
-import EyesOverlay from '@/components/EyesOverlay';
 import { workExperiences, projects, albums } from '@/data/portfolioData';
+import TiltedCard from '@/components/TiltedCard';
 
 const Index = () => {
-  const [showEyes, setShowEyes] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-
-  const triggerEyesOverlay = () => {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const imgWidth = 300;
-    const imgHeight = 200;
-    const left = Math.random() * (vw - imgWidth);
-    const top = Math.random() * (vh - imgHeight);
-    setPosition({ top, left });
-    setShowEyes(true);
-    setTimeout(() => setShowEyes(false), 2000);
-  };
-
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-100">
-      <EyesOverlay show={showEyes} position={position} />
-      <Header onLightMode={triggerEyesOverlay} />
-      
       <main className="max-w-3xl mx-auto px-6 py-6 space-y-16">
         {/* Introduction */}
         <section className="mb-8">
@@ -44,7 +25,7 @@ const Index = () => {
               Right now, I'm learning everything I can from the people building the next generation of products from internal developer platforms to AI tooling.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              I spend my time between Columbus, New York, and San Francisco. Outside of work, I'm usually watching movies, wandering through museums, or finding new places to eat with friends.
+              Im originally from the Midwest. I spend my free time exploring new places, listening to music, or folding origami.
             </p>
           </div>
         </section>
@@ -95,7 +76,6 @@ const Index = () => {
         {/* Albums Section */}
         <section>
           <SectionTitle title="Favorite Albums" />
-          
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {albums.map((album, index) => (
               <a
@@ -103,18 +83,22 @@ const Index = () => {
                 href={album.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative aspect-square overflow-hidden rounded-lg bg-muted hover:scale-105 transition-transform duration-300"
+                className="block"
+                style={{ textDecoration: 'none' }}
               >
-                <img
-                  src={album.coverUrl}
-                  alt={`${album.title} by ${album.artist}`}
-                  className="w-full h-full object-cover"
+                <TiltedCard
+                  imageSrc={album.coverUrl}
+                  altText={`${album.title} by ${album.artist}`}
+                  containerHeight="140px"
+                  containerWidth="100%"
+                  imageHeight="140px"
+                  imageWidth="140px"
+                  scaleOnHover={1.08}
+                  rotateAmplitude={14}
+                  showMobileWarning={false}
+                  showTooltip={false}
+                  displayOverlayContent={false}
                 />
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
-                  <h3 className="text-white font-semibold text-sm">{album.title}</h3>
-                  <p className="text-white/80 text-xs">{album.artist}</p>
-                  <p className="text-white/60 text-xs">{album.year}</p>
-                </div>
               </a>
             ))}
           </div>

@@ -29,7 +29,7 @@
 
   .dark {
     /* Dark mode colors - inverted hierarchy from light mode */
-    --background: 0 0% 16%; /* Dark gray (#2a2a2a) */
+    --background: 120 2% 12%; /* #1E1F1E */
     --foreground: 0 0% 93%; /* Light gray (#EEEEEE) - inverted from light mode's dark text */
     --card: 0 0% 20%; /* Slightly lighter than background */
     --card-foreground: 0 0% 93%;
