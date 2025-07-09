@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import RoleCard from '@/components/RoleCard';
-import SectionTitle from '@/components/SectionTitle';
+import RoleCard from '../components/custom/RoleCard';
+import SectionTitle from '../components/common/SectionTitle';
 import { workExperiences, projects, albums } from '@/data/portfolioData';
-import TiltedCard from '@/components/TiltedCard';
+import TiltedCard from '../components/custom/TiltedCard';
 
 const Index = () => {
   return (
