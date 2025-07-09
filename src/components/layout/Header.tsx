@@ -1,7 +1,7 @@
 import { Github, Linkedin, Mail } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
-import IconLink from './IconLink';
-import { personalLinks } from '../data/portfolioData';
+import ThemeToggle from '../common/ThemeToggle';
+import IconLink from '../common/IconLink';
+import { personalLinks } from '../../data/portfolioData';
 
 const iconMap: Record<string, JSX.Element> = {
   'GitHub': <Github className="h-4 w-4" />,

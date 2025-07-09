@@ -1,4 +1,4 @@
-import DotGrid from '../components/DotGrid';
+import DotGrid from '../components/custom/DotGrid';
 import NotFoundImg from '../assets/404NotFound.png';
 import { useTheme } from '../hooks/useTheme';
 import { useEffect, useState } from 'react';

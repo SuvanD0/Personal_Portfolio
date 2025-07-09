@@ -1,4 +1,4 @@
-import EyesBurning from '../assets/EyesBurning.png';
+import EyesBurning from '../../assets/EyesBurning.png';
 
 interface EyesOverlayProps {
   show: boolean;

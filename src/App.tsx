@@ -5,12 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Footer from "./components/Footer";
+import Footer from "./components/layout/Footer";
 import Resume from "./pages/Resume";
-import EyesOverlay from './components/EyesOverlay';
+import EyesOverlay from './components/custom/EyesOverlay';
 import { useTheme } from './hooks/useTheme';
 import { useRef, useState, useEffect } from 'react';
-import Header from './components/Header';
+import Header from './components/layout/Header';
 
 const queryClient = new QueryClient();
 
