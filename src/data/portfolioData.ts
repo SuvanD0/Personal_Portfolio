@@ -1,5 +1,5 @@
 import React from 'react';
-import { Briefcase, Building, Code, Database, Factory, Globe, Landmark, MessageSquare, PenTool, Play, Github, Linkedin, Twitter, Mail } from 'lucide-react';
+import { Briefcase, Building, Code, Database, Factory, Globe, Landmark, MessageSquare, PenTool, Play, Github, Linkedin, Twitter, Mail, Award, Users, BookOpen } from 'lucide-react';
 import AmazonLogo from '@/assets/logos/companies/Amazon.jpg';
 import JPMorganLogo from '@/assets/logos/companies/JPMorgan.png';
 import BlueBonnetLogo from '@/assets/logos/companies/BlueBonnetData.jpg';
@@ -37,6 +37,16 @@ export interface AlbumData {
   link?: string;
 }
 
+export interface LeadershipData {
+  logo?: React.ReactNode;
+  title: string;
+  organization: string;
+  period: string;
+  description: string;
+  achievements?: string[];
+  tags?: string[];
+}
+
 const createLogo = (src: string, alt: string) => {
   return React.createElement('img', {
     src,
@@ -66,48 +76,48 @@ const createProjectLogo = (src: string, alt: string) => {
 export const workExperiences: RoleCardData[] = [
   {
     logo: createLogo(AmazonLogo, "Amazon Logo"),
-    company: "Amazon Web Services",
+    company: "Amazon Web Services (AWS)",
     role: "Software Development Engineer Intern",
-    period: "Summer 2025",
+    period: "May 2025 – Aug 2025",
     location: "Seattle, WA",
-    description: "Working on request throttling and rate-limiting optimization for AWS Bedrock, aiming to reduce p99 latency by 12% across 20B+ daily API calls.",
-    tags: ["Java", "Go", "Distributed Systems", "Traffic Engineering"]
+    description: "Integrated OpenSearch into Bedrock's throttling control plane, enabling complex searches across 100,000+ rate limiting rule sets. Implemented real-time anomaly detection to flag hostile rule patterns, preventing 200+ potential service disruptions per quarter. Engineered reusable CloudFormation templates for network-layer alert monitoring via AWS CloudWatch, now used by 3 teams. Launched a Quicksight dashboard for throttling rule sets, saving ~5 engineer-hours/week by eliminating manual database queries.",
+    tags: ["Java", "Go", "AWS", "OpenSearch", "CloudFormation", "CloudWatch", "Quicksight", "Distributed Systems"]
   },
   {
     logo: createLogo(JPMorganLogo, "J.P. Morgan Logo"),
     company: "J.P. Morgan Chase",
     role: "Software Engineer Intern",
-    period: "Summer/Fall 2024",
+    period: "May 2024 – Dec 2024",
     location: "Columbus, OH",
-    description: "Led end-to-end product development of Blueprint, reducing load by 60% for 10,000+ daily users by migrating to Next.js from React. Decreased data pipeline latency by 40% by merging 7 data ingestion APIs into 3 endpoints and added Splunk logs to monitor performance. Deployed to AWS using Cloud Foundry & Jenkins, and implemented monitoring tools with 100% test coverage using Jest and JUnit. Achieved 99.9% data pipeline reliability for 1M+ daily events by adding Kafka streams with automated error detection and recovery.",
-    tags: ["TypeScript/JavaScript", "Next.js", "React", "Splunk", "AWS", "Jenkins", "Kafka", "Cloud Foundry"]
+    description: "Migrated React app to Next.js with TypeScript, improving Core Web Vitals by 50%, adding WCAG 2.1 accessibility for 10,000+ users. Built 7 reusable TypeScript/React components with full keyboard navigation and ARIA support, deployed across 2 production apps. Improved data pipeline latency by 40% merging 7 data ingestion APIs into 3 endpoints, added Splunk logs to monitor performance. Achieved full test coverage deploying applications to AWS via Cloud Foundry and Jenkins, monitored by Jest and JUnit.",
+    tags: ["TypeScript/JavaScript", "Next.js", "React", "Splunk", "AWS", "Jenkins", "Cloud Foundry", "WCAG 2.1", "ARIA"]
   },
   {
-    logo: createLogo(BlueBonnetLogo, "BlueBonnet Data Logo"),
-    company: "BlueBonnet Data",
-    role: "Product Analytics Intern",
-    period: "Spring/Summer 2024",
-    location: "Boston, MA",
-    description: "Drove 28% higher conversion rates through data-driven A/B testing and workflow optimization based on behavioral analytics. Built a React-based voter registration system processing 40,000+ constituent interactions, improving data retrieval speed by 45%. Registered 3,000+ new voters in target districts through optimized outreach strategies. Architected real-time analytics tracking 100,000+ voter interactions, cutting reporting time by 75% through automated SQL pipelines.",
-    tags: ["Python", "A/B Testing", "Data Analysis", "SQL", "React", "Behavioral Analytics", "TypeScript"]
+    logo: createLogo(YaleLawSchoolLogo, "Yale Law School Logo"),
+    company: "Yale Law School Eviction Lab",
+    role: "Research Assistant",
+    period: "May 2024 – Present",
+    location: "New Haven, CT",
+    description: "Developing an open-source Python library to predict demographic shifts and gentrification patterns, now used by ~500 researchers. Created ML models with 92% accuracy in predicting neighborhood gentrification, leveraging TensorFlow and historical datasets. Engineered a data scraper to automate housing data collection, transforming 1M+ listings into structured datasets for model training.",
+    tags: ["Python", "Machine Learning", "TensorFlow", "Data Science", "Open Source", "Research"]
   },
   {
     logo: createLogo(NorthwestLogo, "Northwest Bank Logo"),
     company: "Northwest Bancshares",
     role: "Software Engineer/Product Management Intern",
-    period: "Fall 2023",
+    period: "Aug 2023 – Dec 2023",
     location: "Columbus, OH",
-    description: "Grew customer satisfaction by ~1 star. Reduced churn by 15% by managing the GTM of an AI-powered financial support chatbot. Orchestrated chatbot deployment handling 20,000+ interactions by architecting scalable infrastructure on Azure Kubernetes Service. Streamlined eliminating 1,000+ monthly customer service calls by engineering data-driven FAQ page from chatbot analytics, deflecting 25% of monthly support tickets.",
-    tags: ["AI", "Azure", "Kubernetes", "Product Management", "Data Analytics"]
+    description: "Deployed chatbot infrastructure on Azure Kubernetes Service for customer support automation, scaling to 500+ daily interactions. Eliminated 300+ monthly customer service calls by building a dynamic FAQ system sourced from real-time chatbot queries.",
+    tags: ["Azure", "Kubernetes", "Product Management", "Chatbot", "FAQ System", "Customer Support"]
   },
   {
     logo: createLogo(WillowTreeLogo, "WillowTree Logo"),
     company: "WillowTree Apps",
     role: "Software Engineer Intern",
-    period: "Summer 2023",
+    period: "Jun 2023 – Sep 2023",
     location: "Cincinnati, OH",
-    description: "Raised checkout conversion by 11% through systematic A/B testing of TypeScript-based interactive prototypes across 40 participants. Improved chatbot accuracy to 97% by experimenting with dual-LLM architecture where one model validated the other's responses. Led weekly stakeholder meetings with major QSR client, updating app design based on user feedback and testing results.",
-    tags: ["TypeScript", "A/B Testing", "LLM", "UX Design", "User Testing", "React Native"]
+    description: "Prototyped mobile features with design/product teams, iterating on 100+ user feedback sessions to improve satisfaction by 25%. Built and deployed 3 features in Kotlin for the production android app, fully integrated with backend services and client infrastructure.",
+    tags: ["Kotlin", "Android", "Mobile Development", "User Experience", "Prototyping", "Backend Integration"]
   }
 ];
 
@@ -119,35 +129,45 @@ export const projects: RoleCardData[] = [
   {
     logo: createProjectLogo(WikimediaLogo, "Wikimedia Logo"),
     title: "WikiMedia (Wikipedia)",
-    description: "ML Retention/Engagement Pipeline",
-    year: "2024 - Present",
-    details: "Developed ML retention model analyzing 100,000+ lifecycles, boosting prediction accuracy 23% to guide feature roadmap. Discovered a 30% higher community engagement on articles with a balance bot-human edit ratio by analyzing 1M+ bot edits. Accelerated project delivery by 2 months leading 5-person consulting team by implementing Agile methodologies through Jira.",
-    tags: ["Jira", "PyTorch", "Amplitude", "Machine Learning", "Agile"]
-  },
-  {
-    logo: createProjectLogo(YaleLawSchoolLogo, "Yale Law School Logo"),
-    title: "Research @ Yale Law Eviction Lab",
-    description: "Research Project at Yale",
-    year: "2024 - Present",
-    details: "Designed gentrification prediction model analyzing 10+ years of census using TensorFlow to track geo-spatial population shifts. Co-Authoring a paper on using \"escape velocity\" approach to calculating a Gentrification Index (GI) of a given area. Model achieved mean absolute error under 5 percentage points for rent growth predictions.",
-    tags: ["Pandas", "NumPy", "TensorFlow", "Python", "SQL", "Data Science"]
+    description: "ML Content Classification & Engagement Analysis",
+    year: "Aug 2024 – Present",
+    details: "Built an ML model to classify AI vs human generated content, improving content attribution accuracy by 23% across 100,000+ articles. Discovered a 30% higher community engagement on articles with a balanced bot-human edit ratio by analyzing 1M+ bot edits.",
+    tags: ["Machine Learning", "Content Analysis", "Data Science", "Python", "Big Data", "Community Engagement"]
   },
   {
     logo: createProjectLogo(GroupMeLogo, "GroupMe Logo"),
-    title: "Group Me Spam Detection",
-    description: "Hackathon Project - HackI/O 2023",
-    year: "2023 - Present",
+    title: "GroupMe Spam Detection Bot",
+    description: "AI-Powered Spam Filtering System",
+    year: "Dec 2023 – Present",
     details: "Successfully deleted 3000+ spam messages by building a spam-detection model and integrating it with GroupMe API using Lambda. Won 'Most Creative Hack' at HackI/O 2023 and expanded the bot to 20 group chats within 10 months, releasing 3 updates since.",
-    tags: ["AWS Lambda", "scikit-learn", "NextJS", "Machine Learning", "API Integration", "CloudWatch"],
-    link: "https://github.com/SuvanD0/groupme-spam-bot"
+    tags: ["AWS Lambda", "Machine Learning", "API Integration", "Spam Detection", "Bot Development", "Hackathon Winner"]
+  }
+];
+
+export const leadershipExperience: LeadershipData[] = [
+  {
+    logo: createIcon(Award),
+    title: "College Talent Fellow",
+    organization: "a16z",
+    period: "Aug 2024 – Present",
+    description: "Selected as a fellow in Andreessen Horowitz's prestigious college talent program, gaining insights into venture capital and startup ecosystem.",
+    tags: ["Venture Capital", "Startup Ecosystem", "Leadership", "Networking"]
   },
   {
-    logo: createIcon(PenTool),
-    title: "The Colors of You",
-    description: "Personal Project",
-    year: "2023",
-    details: "Created an interactive tool for photographers to visualize their color palette preferences. The application analyzes a set of images, extracts dominant colors, and presents a visual story of the artist's unique palette. Used by 150+ photographers since launch. Built with React.js for the frontend and Python with OpenCV for color analysis.",
-    tags: ["React.js", "Python", "OpenCV", "Color Theory"]
+    logo: createIcon(Users),
+    title: "President",
+    organization: "Big Data & Analytics Association",
+    period: "Jan 2024 – Present",
+    description: "Expanded sponsor base from 2 to 11 companies by leading partnership outreach and hosting 20+ events with Fortune 500 firms. Launched a weekly lecture series on machine learning and data science, reaching 100+ students and ending in a 400-person gala. Organized two tech career fairs (1,000+ attendees each) and hosted DataI/O, a 2 day intercollegiate analytics & data hackathon.",
+    achievements: [
+      "Expanded sponsor base from 2 to 11 companies",
+      "Hosted 20+ events with Fortune 500 firms",
+      "Launched weekly ML/DS lecture series reaching 100+ students",
+      "Organized 400-person gala event",
+      "Hosted two tech career fairs (1,000+ attendees each)",
+      "Organized DataI/O intercollegiate hackathon"
+    ],
+    tags: ["Leadership", "Event Planning", "Partnership Development", "Data Science", "Community Building"]
   }
 ];
 
@@ -166,6 +186,11 @@ export const personalLinks: PersonalLink[] = [
     title: "Email",
     description: "Get in touch via email",
     url: "mailto:suvandommeti0@gmail.com"
+  },
+  {
+    title: "Portfolio",
+    description: "Visit my personal portfolio",
+    url: "https://suvandommeti.me"
   }
 ];
 
