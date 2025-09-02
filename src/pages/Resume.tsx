@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Download } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Resume = () => {
   useEffect(() => {
@@ -13,8 +14,10 @@ const Resume = () => {
     window.open('/Dommeti-Suvan-Resume.pdf', '_blank');
   };
 
+  const navigate = useNavigate();
+
   const handleGoHome = () => {
-    window.location.href = '/';
+    navigate('/');
   };
 
   return (

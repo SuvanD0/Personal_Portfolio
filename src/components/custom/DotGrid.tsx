@@ -18,12 +18,50 @@ const throttle = (func: (...args: any[]) => void, limit: number) => {
 
 function hexToRgb(hex: string) {
   const m = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
-  if (!m) return { r: 0, g: 0, b: 0 };
+  if (!m) return null;
   return {
     r: parseInt(m[1], 16),
     g: parseInt(m[2], 16),
     b: parseInt(m[3], 16),
   };
+}
+
+function hslToRgb(h: number, s: number, l: number) {
+  // h in [0,360], s and l in [0,100]
+  s /= 100;
+  l /= 100;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const hh = h / 60;
+  const x = c * (1 - Math.abs((hh % 2) - 1));
+  let r1 = 0, g1 = 0, b1 = 0;
+  if (0 <= hh && hh < 1) [r1, g1, b1] = [c, x, 0];
+  else if (1 <= hh && hh < 2) [r1, g1, b1] = [x, c, 0];
+  else if (2 <= hh && hh < 3) [r1, g1, b1] = [0, c, x];
+  else if (3 <= hh && hh < 4) [r1, g1, b1] = [0, x, c];
+  else if (4 <= hh && hh < 5) [r1, g1, b1] = [x, 0, c];
+  else if (5 <= hh && hh <= 6) [r1, g1, b1] = [c, 0, x];
+  const m = l - c / 2;
+  return {
+    r: Math.round((r1 + m) * 255),
+    g: Math.round((g1 + m) * 255),
+    b: Math.round((b1 + m) * 255),
+  };
+}
+
+function parseColorToRgb(color: string) {
+  // Try hex first
+  const hex = hexToRgb(color);
+  if (hex) return hex;
+  // Try hsl(...) or hsla(...)
+  const hslMatch = color.trim().match(/^hsla?\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%/i);
+  if (hslMatch) {
+    const h = parseFloat(hslMatch[1]);
+    const s = parseFloat(hslMatch[2]);
+    const l = parseFloat(hslMatch[3]);
+    return hslToRgb(h, s, l);
+  }
+  // Fallback to black
+  return { r: 0, g: 0, b: 0 };
 }
 
 type DotGridProps = {
@@ -71,8 +109,8 @@ const DotGrid = ({
     lastY: 0,
   });
 
-  const baseRgb = useMemo(() => hexToRgb(baseColor), [baseColor]);
-  const activeRgb = useMemo(() => hexToRgb(activeColor), [activeColor]);
+  const baseRgb = useMemo(() => parseColorToRgb(baseColor), [baseColor]);
+  const activeRgb = useMemo(() => parseColorToRgb(activeColor), [activeColor]);
 
   const circlePath = useMemo(() => {
     if (typeof window === "undefined" || !(window as any).Path2D) return null;

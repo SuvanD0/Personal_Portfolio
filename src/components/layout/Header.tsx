@@ -1,5 +1,5 @@
 import { Github, Linkedin, Mail } from 'lucide-react';
-import ThemeToggle from '../common/ThemeToggle';
+import ThemeSlider from '../common/ThemeSlider';
 import IconLink from '../common/IconLink';
 import { personalLinks } from '../../data/portfolioData';
 
@@ -23,7 +23,7 @@ const Header = ({ onLightMode }: { onLightMode?: () => void }) => {
             label={link.title}
           />
         ))}
-        <ThemeToggle onLightMode={onLightMode} />
+        <ThemeSlider onLightMode={onLightMode} />
       </div>
     </header>
   );
