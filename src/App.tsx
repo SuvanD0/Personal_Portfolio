@@ -16,8 +16,8 @@ const queryClient = new QueryClient();
 
 const EYES_OVERLAY_DURATION = 800;
 
-const App = () => {
-  const { theme, toggleTheme } = useTheme();
+const AppContent = () => {
+  const { theme } = useTheme();
   const [showEyes, setShowEyes] = useState(false);
   const [eyesPosition, setEyesPosition] = useState({ top: 100, left: 100 });
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -60,24 +60,32 @@ const App = () => {
   }, [theme]);
 
   return (
+    <>
+      <EyesOverlay show={showEyes} position={eyesPosition} />
+      <div className="min-h-screen flex flex-col">
+        <Header onLightMode={triggerEyesOverlay} />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/resume" element={<Resume />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </>
+  );
+};
+
+const App = () => {
+  return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <EyesOverlay show={showEyes} position={eyesPosition} />
-          <div className="min-h-screen flex flex-col">
-            <Header onLightMode={triggerEyesOverlay} />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/resume" element={<Resume />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
+          <AppContent />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

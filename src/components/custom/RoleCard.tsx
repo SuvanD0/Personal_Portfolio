@@ -59,7 +59,7 @@ const RoleCard = ({
   );
 
   return (
-    <div className="mb-3 rounded-lg transition-colors duration-300 bg-card">
+    <div className="mb-3 rounded-lg transition-colors duration-300 bg-background">
       <div 
         className="p-4 flex justify-between items-center cursor-pointer hover:bg-muted/20 transition-colors duration-200 rounded-lg"
         onClick={() => setIsOpen(!isOpen)}
