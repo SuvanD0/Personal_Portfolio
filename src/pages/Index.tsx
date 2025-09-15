@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import RoleCard from '../components/custom/RoleCard';
 import SectionTitle from '../components/common/SectionTitle';
 import { workExperiences, projects, albums } from '@/data/portfolioData';
@@ -40,7 +39,7 @@ const Index = () => {
           <div className="space-y-2">
             {workExperiences.map((experience, index) => (
               <RoleCard 
-                key={index}
+                key={`${experience.company ?? 'work'}-${experience.role ?? index}-${experience.period ?? index}`}
                 logo={experience.logo}
                 company={experience.company}
                 role={experience.role}
@@ -60,7 +59,7 @@ const Index = () => {
           <div className="space-y-2">
             {projects.map((project, index) => (
               <RoleCard 
-                key={index}
+                key={`${project.title ?? 'project'}-${project.year ?? index}`}
                 logo={project.logo}
                 title={project.title}
                 description={project.description}
@@ -79,7 +78,7 @@ const Index = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {albums.map((album, index) => (
               <a
-                key={index}
+                key={`${album.title}-${album.artist}`}
                 href={album.link}
                 target="_blank"
                 rel="noopener noreferrer"
