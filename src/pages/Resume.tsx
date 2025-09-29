@@ -11,7 +11,7 @@ const Resume = () => {
 
   const handleDownload = () => {
     // Open the resume PDF in a new tab
-    window.open('/Dommeti-Suvan-Resume.pdf', '_blank');
+    window.open('/Suvan_Dommeti_Resume.pdf', '_blank');
   };
 
   const navigate = useNavigate();

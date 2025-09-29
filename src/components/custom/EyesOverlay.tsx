@@ -1,4 +1,4 @@
-import EyesBurning from '../../assets/EyesBurning.png';
+// Use public asset path to avoid bundling issues in production
 
 interface EyesOverlayProps {
   show: boolean;
@@ -19,7 +19,7 @@ const EyesOverlay = ({ show, position }: EyesOverlayProps) => {
       zIndex: 9999,
     }}>
       <img
-        src={EyesBurning}
+        src={'/EyesBurning.png'}
         alt="Eyes Burning"
         style={{
           position: 'absolute',
