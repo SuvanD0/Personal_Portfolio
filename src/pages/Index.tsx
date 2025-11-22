@@ -2,8 +2,49 @@ import RoleCard from '../components/custom/RoleCard';
 import SectionTitle from '../components/common/SectionTitle';
 import { workExperiences, projects, albums } from '@/data/portfolioData';
 import TiltedCard from '../components/custom/TiltedCard';
+import { useSpotify } from '@/hooks/useSpotify';
 
 const Index = () => {
+  const { data: spotifyData } = useSpotify();
+
+  const getSpotifyText = () => {
+    if (!spotifyData || !spotifyData.title) {
+      return "Not currently listening to anything";
+    }
+
+    if (spotifyData.isPlaying) {
+      return (
+        <>
+          Currently listening to{' '}
+          <a
+            href={spotifyData.songUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground hover:underline font-medium"
+          >
+            {spotifyData.title}
+          </a>
+          {' '}by {spotifyData.artist}
+        </>
+      );
+    }
+
+    return (
+      <>
+        Last played{' '}
+        <a
+          href={spotifyData.songUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-foreground hover:underline font-medium"
+        >
+          {spotifyData.title}
+        </a>
+        {' '}by {spotifyData.artist}
+      </>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-100">
       <main className="max-w-3xl mx-auto px-6 py-6 space-y-16">
@@ -25,6 +66,9 @@ const Index = () => {
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
               Im originally from the Midwest. I spend my free time exploring new places, listening to music, or folding origami.
+            </p>
+            <p className="mt-4 text-muted-foreground leading-relaxed">
+              {getSpotifyText()}
             </p>
           </div>
         </section>
