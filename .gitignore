@@ -50,3 +50,6 @@ dist-ssr
 
 # Documentation
 DESIGN_SYSTEM.md
+
+# Lock files
+bun.lockb
