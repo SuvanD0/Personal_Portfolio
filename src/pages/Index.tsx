@@ -65,7 +65,7 @@ const Index = () => {
               Right now, I'm learning everything I can from the people building the next generation of products from internal developer platforms to AI tooling.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              Im originally from the Midwest. I spend my free time exploring new places, listening to music, or folding origami.
+              Im originally from the Midwest. I spend my free time exploring new places, listening to <a href="https://www.last.fm/user/Suvan_Dommeti" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">music</a>, or folding origami.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
               {getSpotifyText()}
