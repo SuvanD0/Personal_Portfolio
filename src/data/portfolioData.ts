@@ -186,11 +186,6 @@ export const personalLinks: PersonalLink[] = [
     title: "Email",
     description: "Get in touch via email",
     url: "mailto:suvandommeti0@gmail.com"
-  },
-  {
-    title: "Portfolio",
-    description: "Visit my personal portfolio",
-    url: "https://suvandommeti.me"
   }
 ];
 
