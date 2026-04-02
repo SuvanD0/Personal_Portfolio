@@ -1,25 +1,46 @@
 import DomeGallery from '../components/custom/DomeGallery';
+import { useTheme } from '../hooks/useTheme';
 
 const origamiImages = [
-  { src: 'https://images.unsplash.com/photo-1567359781514-81212b4d75c7?w=600', alt: 'Origami crane' },
-  { src: 'https://images.unsplash.com/photo-1606103836293-0a063b7a5e89?w=600', alt: 'Origami flower' },
-  { src: 'https://images.unsplash.com/photo-1612528443702-f6741f70a049?w=600', alt: 'Origami bird' },
-  { src: 'https://images.unsplash.com/photo-1618336753974-aae8e04506aa?w=600', alt: 'Paper folding' },
-  { src: 'https://images.unsplash.com/photo-1603484477859-abe6a73f9366?w=600', alt: 'Origami dragon' },
-  { src: 'https://images.unsplash.com/photo-1598618443855-232ee0f819f6?w=600', alt: 'Origami butterfly' },
-  { src: 'https://images.unsplash.com/photo-1602081112062-4bac61ecca36?w=600', alt: 'Paper art' },
-  { src: 'https://images.unsplash.com/photo-1569385210018-127685729c65?w=600', alt: 'Origami fox' },
+  { src: 'https://picsum.photos/seed/ori1/600/800', alt: 'Origami 1' },
+  { src: 'https://picsum.photos/seed/ori2/600/800', alt: 'Origami 2' },
+  { src: 'https://picsum.photos/seed/ori3/600/800', alt: 'Origami 3' },
+  { src: 'https://picsum.photos/seed/ori4/600/800', alt: 'Origami 4' },
+  { src: 'https://picsum.photos/seed/ori5/600/800', alt: 'Origami 5' },
 ];
 
+const BG_COLORS: Record<string, string> = {
+  dark: '#1E1F1E',
+  light: '#ECE7DA',
+  fun: '#fefce8',
+};
+
 const Origami = () => {
+  const { theme } = useTheme();
+  const bg = BG_COLORS[theme] ?? '#1E1F1E';
+
   return (
-    <div style={{ width: '100vw', height: 'calc(100vh - 60px)', position: 'relative' }}>
+    <div style={{ width: '100%', height: 'calc(100vh - 73px)', position: 'relative', overflow: 'hidden' }}>
+      {/* Fade from header into gallery */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '120px',
+          background: `linear-gradient(to bottom, ${bg}, transparent)`,
+          zIndex: 10,
+          pointerEvents: 'none',
+        }}
+      />
       <DomeGallery
         images={origamiImages}
-        minRadius={1000}
-        segments={24}
+        segments={16}
+        minRadius={300}
+        maxRadius={480}
         grayscale={false}
-        overlayBlurColor="var(--background, #ffffff)"
+        overlayBlurColor={bg}
       />
     </div>
   );
