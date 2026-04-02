@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Footer from "./components/layout/Footer";
 import Resume from "./pages/Resume";
+import Origami from "./pages/Origami";
 import EyesOverlay from './components/custom/EyesOverlay';
 import { useTheme } from './hooks/useTheme';
 import { useRef, useState, useEffect } from 'react';
@@ -68,6 +69,7 @@ const AppContent = () => {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/resume" element={<Resume />} />
+            <Route path="/origami" element={<Origami />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
