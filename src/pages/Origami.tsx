@@ -36,7 +36,7 @@ const Origami = () => {
       />
       <DomeGallery
         images={origamiImages}
-        segments={16}
+        segments={12}
         minRadius={300}
         maxRadius={480}
         grayscale={false}
