@@ -5,6 +5,7 @@ import JPMorganLogo from '@/assets/logos/companies/JPMorgan.png';
 import BlueBonnetLogo from '@/assets/logos/companies/BlueBonnetData.jpg';
 import NorthwestLogo from '@/assets/logos/companies/NorthwestBank.png';
 import WillowTreeLogo from '@/assets/logos/companies/WillowTree.jpg';
+import LovableLogo from '@/assets/logos/companies/Lovable.png';
 import GroupMeLogo from '@/assets/logos/projects/GroupMe.jpg';
 import WikimediaLogo from '@/assets/logos/projects/Wikimedia.png';
 import YaleLawSchoolLogo from '@/assets/logos/projects/YaleLawSchool.png';
@@ -75,6 +76,15 @@ const createProjectLogo = (src: string, alt: string) => {
 
 export const workExperiences: RoleCardData[] = [
   {
+    logo: createLogo(LovableLogo, "Lovable Logo"),
+    company: "Lovable",
+    role: "Growth Intern",
+    period: "Jan 2026 – Present",
+    location: "Remote",
+    description: "Leading hackathon partnerships with colleges and startups to demonstrate Lovable's AI-powered application development tools.",
+    tags: ["Growth", "Partnerships", "AI Tools", "Hackathons", "Developer Relations"]
+  },
+  {
     logo: createLogo(AmazonLogo, "Amazon Logo"),
     company: "Amazon Web Services (AWS)",
     role: "Software Development Engineer Intern",
@@ -126,6 +136,14 @@ const createIcon = (Icon: any) => {
 };
 
 export const projects: RoleCardData[] = [
+  {
+    logo: createIcon(Globe),
+    title: "Shut The Sash",
+    description: "OSU Smart Campus Challenge — Fume Hood Energy Compliance Dashboard",
+    year: "Jan 2026 – Present",
+    details: "Won $60K from the OSU Sustainability Accelerator to reduce fume hood energy waste across Ohio State. Built a live React dashboard tracking sash compliance for 120+ hoods across CBEC research labs, integrating with Intelliweb energy data. Projected $750K in savings over 5 years — 18× ROI. Serving as Data & Engineering Lead on a 4-person team.",
+    tags: ["React", "Data Engineering", "Sustainability", "Energy Analytics", "OSU", "Dashboard"]
+  },
   {
     logo: createProjectLogo(WikimediaLogo, "Wikimedia Logo"),
     title: "WikiMedia (Wikipedia)",
