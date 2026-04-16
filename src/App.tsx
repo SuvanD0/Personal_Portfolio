@@ -12,6 +12,8 @@ import EyesOverlay from './components/custom/EyesOverlay';
 import { useTheme } from './hooks/useTheme';
 import { useRef, useState, useEffect } from 'react';
 import Header from './components/layout/Header';
+import Whoop from './pages/Whoop';
+import WhoopAuth from './pages/WhoopAuth';
 
 const queryClient = new QueryClient();
 
@@ -70,6 +72,8 @@ const AppContent = () => {
             <Route path="/" element={<Index />} />
             <Route path="/resume" element={<Resume />} />
             <Route path="/origami" element={<Origami />} />
+            <Route path="/whoop" element={<Whoop />} />
+            <Route path="/whoop-auth" element={<WhoopAuth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

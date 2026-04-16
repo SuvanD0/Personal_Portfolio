@@ -51,5 +51,11 @@ dist-ssr
 # Documentation
 DESIGN_SYSTEM.md
 
+# Claude Code session data
+.claude/
+
+# WHOOP local tokens
+.whoop_tokens.json
+
 # Lock files
 bun.lockb
