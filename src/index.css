@@ -6,7 +6,9 @@
   :root {
     /* Light mode colors (default) */
     --background: 45 35% 89%; /* Warm beige (#ECE7DA) */
-    --foreground: 222.2 84% 4.9%; /* Dark gray/near black (#222222) */
+    --foreground: 0 0% 13%; /* Near black (#212121) */
+    --clay-ember: 16 37% 51%; /* Muted terracotta (#B06B52) */
+    --clay-ember-subtle: 16 37% 51% / 0.1;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 13%;
     --popover: 0 0% 100%;
@@ -30,6 +32,8 @@
   .dark {
     /* Dark mode colors - inverted hierarchy from light mode */
     --background: 120 2% 12%; /* #1E1F1E */
+    --clay-ember: 16 43% 57%; /* Muted terracotta dark (#C07B62) */
+    --clay-ember-subtle: 16 43% 57% / 0.1;
     --foreground: 0 0% 93%; /* Light gray (#EEEEEE) - inverted from light mode's dark text */
     --card: 0 0% 20%; /* Slightly lighter than background */
     --card-foreground: 0 0% 93%;
@@ -57,10 +61,19 @@
                  "Segoe UI Emoji", "Segoe UI Symbol";
   }
   
-  h1, h2, h3, h4, h5, h6 {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, 
+  h1, h2 {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto,
                  "Helvetica Neue", Arial, sans-serif;
     font-weight: 600;
+    letter-spacing: -0.02em;
+    @apply text-foreground;
+  }
+
+  h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     @apply text-foreground;
   }
 

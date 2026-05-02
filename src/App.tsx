@@ -14,6 +14,7 @@ import { useRef, useState, useEffect } from 'react';
 import Header from './components/layout/Header';
 import Whoop from './pages/Whoop';
 import WhoopAuth from './pages/WhoopAuth';
+import Stats from './pages/Stats';
 
 const queryClient = new QueryClient();
 
@@ -74,6 +75,7 @@ const AppContent = () => {
             <Route path="/origami" element={<Origami />} />
             <Route path="/whoop" element={<Whoop />} />
             <Route path="/whoop-auth" element={<WhoopAuth />} />
+            <Route path="/stats" element={<Stats />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -1,4 +1,5 @@
 import { Github, Linkedin, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import ThemeSlider from '../common/ThemeSlider';
 import IconLink from '../common/IconLink';
 import { personalLinks } from '../../data/portfolioData';
@@ -12,7 +13,7 @@ const iconMap: Record<string, JSX.Element> = {
 const Header = ({ onLightMode }: { onLightMode?: () => void }) => {
   return (
     <header className="py-6 flex justify-between items-center w-full max-w-3xl mx-auto px-6">
-      <h1 className="text-xl font-semibold tracking-tight">Suvan Dommeti</h1>
+      <Link to="/" className="text-xl font-semibold tracking-tight hover:opacity-80 transition-opacity">Suvan Dommeti</Link>
       
       <div className="flex items-center space-x-3">
         {personalLinks.map(link => (

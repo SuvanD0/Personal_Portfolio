@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-29T00:00:00Z",
+  "title": "Design System: Suvan Dommeti Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "clay-ember": {
+        "role": "primary",
+        "displayName": "Clay Ember",
+        "canonical": "oklch(52% 0.09 35)",
+        "lightMode": "#B06B52",
+        "darkMode": "#C07B62",
+        "tonalRamp": ["#3A1E15", "#5A2F22", "#7A4032", "#9A5242", "#B06B52", "#C48472", "#D49E90", "#E8C8BE"]
+      },
+      "toasted-linen": {
+        "role": "neutral",
+        "displayName": "Toasted Linen",
+        "canonical": "oklch(89% 0.015 80)",
+        "lightMode": "#ECE7DA",
+        "darkMode": null,
+        "tonalRamp": ["#4A4540", "#6A6560", "#8A8580", "#AAA59E", "#C8C3BC", "#D8D3CA", "#E4DFD6", "#ECE7DA"]
+      },
+      "moss-shadow": {
+        "role": "neutral",
+        "displayName": "Moss Shadow",
+        "canonical": "oklch(18% 0.005 145)",
+        "lightMode": null,
+        "darkMode": "#1E1F1E",
+        "tonalRamp": ["#1E1F1E", "#2A2B2A", "#363736", "#444544", "#525352", "#686968", "#848584", "#A4A5A4"]
+      },
+      "ink-well": {
+        "role": "neutral",
+        "displayName": "Ink Well",
+        "canonical": "oklch(20% 0 0)",
+        "lightMode": "#212121",
+        "darkMode": null,
+        "tonalRamp": ["#121212", "#1C1C1C", "#212121", "#2E2E2E", "#3D3D3D", "#525252", "#6E6E6E", "#929292"]
+      },
+      "ash-light": {
+        "role": "neutral",
+        "displayName": "Ash Light",
+        "canonical": "oklch(93% 0 0)",
+        "lightMode": null,
+        "darkMode": "#EDEDED",
+        "tonalRamp": ["#484848", "#686868", "#888888", "#A0A0A0", "#BBBBBB", "#D0D0D0", "#E2E2E2", "#EDEDED"]
+      },
+      "pearl-gray": {
+        "role": "neutral",
+        "displayName": "Pearl Gray",
+        "canonical": "oklch(93% 0 0)",
+        "lightMode": "#EEEEEE",
+        "darkMode": null,
+        "tonalRamp": ["#484848", "#686868", "#888888", "#AAAAAA", "#CCCCCC", "#DEDEDE", "#E8E8E8", "#EEEEEE"]
+      },
+      "stone-mid": {
+        "role": "neutral",
+        "displayName": "Stone Mid",
+        "canonical": "oklch(45% 0 0)",
+        "lightMode": "#666666",
+        "darkMode": "#999999",
+        "tonalRamp": ["#1A1A1A", "#2E2E2E", "#444444", "#565656", "#666666", "#7A7A7A", "#909090", "#AAAAAA"]
+      },
+      "charcoal-lift": {
+        "role": "neutral",
+        "displayName": "Charcoal Lift",
+        "canonical": "oklch(25% 0 0)",
+        "lightMode": null,
+        "darkMode": "#333333",
+        "tonalRamp": ["#1A1A1A", "#242424", "#2E2E2E", "#333333", "#3E3E3E", "#525252", "#6A6A6A", "#868686"]
+      },
+      "graphite-mid": {
+        "role": "neutral",
+        "displayName": "Graphite Mid",
+        "canonical": "oklch(30% 0 0)",
+        "lightMode": null,
+        "darkMode": "#404040",
+        "tonalRamp": ["#1E1E1E", "#2A2A2A", "#363636", "#404040", "#4E4E4E", "#626262", "#7A7A7A", "#969696"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page-level and section headings. One per major section." },
+      "headline": { "displayName": "Headline", "purpose": "Card titles, company names, role names. Mid-level hierarchy." },
+      "body": { "displayName": "Body", "purpose": "All prose. 65–75ch max per line." },
+      "label": { "displayName": "Label", "purpose": "Tags, metadata, captions, secondary annotations." }
+    },
+    "shadows": [
+      {
+        "name": "ambient-resting",
+        "value": "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
+        "purpose": "Paper-shadow at rest. Light, barely visible. Interactive card elements only."
+      },
+      {
+        "name": "hover-lift",
+        "value": "0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)",
+        "purpose": "Paper-shadow on hover. Significant lift — signals the element responds. TiltedCard and similar."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "duration": "300ms",
+        "purpose": "Default easing for state transitions: hover, toggle-card, toggle-content."
+      },
+      {
+        "name": "ease-fold",
+        "value": "ease-in-out",
+        "duration": "500ms",
+        "purpose": "Longer sequences: fold-in, fold-out, mode-toggle rotation."
+      },
+      {
+        "name": "ease-float",
+        "value": "ease-in-out",
+        "duration": "3000ms",
+        "purpose": "paper-float: ambient, decorative float on origami/gallery elements. Infinite loop."
+      }
+    ],
+    "breakpoints": [
+      { "name": "max-content", "value": "768px", "purpose": "max-w-3xl — the content column width. Never exceed for body text." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Tag / Chip",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Inline categorical label for skills, technologies, and data annotations.",
+      "html": "<span class=\"ds-tag\">TypeScript</span>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; background: #EEEEEE; color: #212121; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.01em; padding: 4px 8px; border-radius: 4px; line-height: 1.4; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: default; } .ds-tag:hover { background: #DCDCDC; } @media (prefers-color-scheme: dark) { .ds-tag { background: #404040; color: #EDEDED; } .ds-tag:hover { background: #525252; } }"
+    },
+    {
+      "name": "Accent Link",
+      "kind": "button",
+      "refersTo": "accent-link",
+      "description": "Inline text link using Clay Ember. Used sparingly — one per section at most.",
+      "html": "<a class=\"ds-accent-link\" href=\"#\">View project</a>",
+      "css": ".ds-accent-link { color: #B06B52; text-decoration: none; font-weight: 500; border-bottom: 1px solid transparent; transition: border-color 0.15s ease-out, opacity 0.15s ease-out; } .ds-accent-link:hover { border-bottom-color: #B06B52; opacity: 0.85; } @media (prefers-color-scheme: dark) { .ds-accent-link { color: #C07B62; } .ds-accent-link:hover { border-bottom-color: #C07B62; } }"
+    },
+    {
+      "name": "Role Card",
+      "kind": "card",
+      "refersTo": "role-card",
+      "description": "Primary content unit for work experience and projects. Flat at rest, tinted on hover, expands on click.",
+      "html": "<div class=\"ds-role-card\"><div class=\"ds-role-card-header\"><div class=\"ds-role-card-title\">Acme Corp</div><div class=\"ds-role-card-meta\">Software Engineer · 2024–Present</div></div><svg class=\"ds-role-card-chevron\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 9l-7 7-7-7\"/></svg></div>",
+      "css": ".ds-role-card { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-radius: 8px; background: transparent; cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-role-card:hover { background: rgba(0,0,0,0.04); } .ds-role-card-title { font-size: 1.125rem; font-weight: 600; letter-spacing: -0.01em; color: #212121; } .ds-role-card-meta { font-size: 0.75rem; color: #666666; margin-top: 2px; } .ds-role-card-chevron { width: 16px; height: 16px; color: #666666; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0; } @media (prefers-color-scheme: dark) { .ds-role-card:hover { background: rgba(255,255,255,0.04); } .ds-role-card-title { color: #EDEDED; } .ds-role-card-meta { color: #999999; } .ds-role-card-chevron { color: #999999; } }"
+    },
+    {
+      "name": "Nav Header",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Centered max-w-3xl header. Name left, icon links + toggle right.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-header-name\" href=\"/\">Suvan Dommeti</a><nav class=\"ds-header-nav\"><a class=\"ds-header-icon-link\" href=\"#\" aria-label=\"GitHub\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z\"/></svg></a></nav></header>",
+      "css": ".ds-header { display: flex; justify-content: space-between; align-items: center; padding: 24px; max-width: 768px; margin: 0 auto; } .ds-header-name { font-size: 1.125rem; font-weight: 600; letter-spacing: -0.01em; color: #212121; text-decoration: none; transition: opacity 0.15s ease-out; } .ds-header-name:hover { opacity: 0.8; } .ds-header-nav { display: flex; align-items: center; gap: 12px; } .ds-header-icon-link { color: #212121; opacity: 0.7; transition: opacity 0.15s ease-out, color 0.15s ease-out; } .ds-header-icon-link:hover { opacity: 1; color: #B06B52; } @media (prefers-color-scheme: dark) { .ds-header-name { color: #EDEDED; } .ds-header-icon-link { color: #EDEDED; } .ds-header-icon-link:hover { color: #C07B62; } }"
+    },
+    {
+      "name": "Stat Panel",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Data display unit for stats page and Whoop data. Number-forward, label beneath. Never a gradient card.",
+      "html": "<div class=\"ds-stat\"><div class=\"ds-stat-value\">7.4<span class=\"ds-stat-unit\">h</span></div><div class=\"ds-stat-label\">avg sleep · last 30d</div></div>",
+      "css": ".ds-stat { display: flex; flex-direction: column; gap: 4px; } .ds-stat-value { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; letter-spacing: -0.02em; color: #212121; line-height: 1.1; } .ds-stat-unit { font-size: 1.25rem; font-weight: 500; color: #666666; margin-left: 2px; } .ds-stat-label { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.01em; color: #666666; } .ds-stat.ds-stat--accent .ds-stat-value { color: #B06B52; } @media (prefers-color-scheme: dark) { .ds-stat-value { color: #EDEDED; } .ds-stat-unit { color: #999999; } .ds-stat-label { color: #999999; } .ds-stat.ds-stat--accent .ds-stat-value { color: #C07B62; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Examined Life",
+    "overview": "This is a portfolio for a builder who tracks everything: what he listens to, how he sleeps, what he ships. The design follows the same discipline. Nothing is here to look good — everything is here because it carries information. The aesthetic is clean and restrained, referencing the precision of claude.ai and the substance-first personality of dvdrod.com.\n\nThe system runs in two modes. Light mode uses Toasted Linen — a warm, slightly amber cream that feels like a well-used notebook. Dark mode uses Moss Shadow — a dark green-gray that reads as deliberate and grounded, not default-dark. Clay Ember, a muted terracotta, appears in both modes as the single accent: interaction states, hover emphasis, the occasional inline link. It earns its presence by being rare.\n\nThe palette, typography, and component behavior reject every generic portfolio pattern: no hero with floating badges, no identical card grids, no gradient text.",
+    "keyCharacteristics": [
+      "Dual-mode: Toasted Linen (light) / Moss Shadow (dark), each intentional",
+      "Single natural accent: Clay Ember (#B06B52), used at ≤10% of any surface",
+      "System sans throughout (SF Pro / Inter) — fast, familiar, never precious",
+      "Max-w-3xl centered column; body text capped at 65–75ch",
+      "Cards reveal; they don't stack decoratively",
+      "Flat by default, lifted on interaction (paper-shadow pattern)"
+    ],
+    "rules": [
+      { "name": "The One Ember Rule", "body": "Clay Ember is used on ≤10% of any given surface, in both light and dark modes. Its rarity is exactly what makes it land. If you reach for it more than once per section, remove one instance.", "section": "colors" },
+      { "name": "The No-Pure-White Rule", "body": "Light mode backgrounds are never #FFFFFF at the page level. Toasted Linen is the canvas. Ghost White is reserved for cards that need to float above it.", "section": "colors" },
+      { "name": "The System-First Rule", "body": "No web font imports. The system stack renders instantly and the portfolio's content — not the typography — is the differentiator.", "section": "typography" },
+      { "name": "The Tight-Top Rule", "body": "Headings use negative letter-spacing (−0.01 to −0.02em). At display size, default tracking reads as too loose.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces don't have shadows at rest unless they are explicitly interactive and use the paper-shadow pattern. Role cards, stat panels, and section containers are shadow-free.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Toasted Linen (#ECE7DA) as the light mode page background — never pure white at the page level.",
+      "Do cap Clay Ember at ≤10% of any surface. One use per section maximum.",
+      "Do use system font stack throughout. No web font imports.",
+      "Do tighten heading letter-spacing: −0.01em at headline size, −0.02em at display size.",
+      "Do cap body text at 65–75ch per line.",
+      "Do keep cards flat at rest; reveal depth only on interaction.",
+      "Do use specificity in copy: exact numbers, actual data, real names.",
+      "Do ensure both light and dark modes receive equal design attention."
+    ],
+    "donts": [
+      "Don't use gradient text (background-clip: text + gradient). Prohibited.",
+      "Don't build a hero section with a tagline, floating badges, and a CTA button.",
+      "Don't create identical card grids: same-sized cards, same icon + heading + text repeated.",
+      "Don't use border-left greater than 1px as a colored stripe on cards or callouts.",
+      "Don't use glassmorphism decoratively.",
+      "Don't add a second accent color. Clay Ember is the only chromatic value in the system.",
+      "Don't display stats or health data with the hero-metric template (big number, gradient card, supporting stat row).",
+      "Don't use bounce or elastic easing."
+    ]
+  }
+}

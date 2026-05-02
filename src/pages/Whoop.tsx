@@ -12,20 +12,24 @@ import {
 
 // ─── palette ──────────────────────────────────────────────────────────────────
 
+// Clay Ember hex values for recharts (CSS vars don't resolve in SVG attrs)
+const CLAY_LIGHT = '#B06B52';
+const CLAY_DARK  = '#C07B62';
+const clay = (dark: boolean) => dark ? CLAY_DARK : CLAY_LIGHT;
+
 const C = {
-  lime:   '#C8F135',
-  cyan:   '#00D4C8',
-  pink:   '#FF2D7A',
-  orange: '#FF6335',
-  purple: '#7B6FFF',
-  rem:    '#C8F135',
-  light:  '#00D4C8',
-  awake:  '#6b7280',
+  optimal:  (dark: boolean) => clay(dark),
+  moderate: '#8A7560',  // warm mid-brown
+  low:      '#A05050',  // muted red
+  rem:      '#6B7B5E',  // muted sage
+  light:    '#8A9A80',  // lighter sage
+  awake:    '#6b7280',
 } as const;
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
-const recColor = (s: number) => s >= 67 ? C.lime : s >= 34 ? C.orange : C.pink;
+const recColor = (s: number, dark = false) =>
+  s >= 67 ? C.optimal(dark) : s >= 34 ? C.moderate : C.low;
 const recZone  = (s: number) => s >= 67 ? 'Optimal' : s >= 34 ? 'Moderate' : 'Low';
 
 const fmtMins = (m: number) => {
@@ -42,7 +46,7 @@ const fmtRel = (d: string) => {
 
 function Card({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn('bg-card border border-border rounded-3xl p-6', className)}>
+    <div className={cn('bg-card border border-border rounded-lg p-6', className)}>
       {children}
     </div>
   );
@@ -61,7 +65,7 @@ function IconBadge({ icon: Icon, color, size = 'md' }: {
   return (
     <div
       className={cn('rounded-2xl flex items-center justify-center flex-shrink-0', dim)}
-      style={{ backgroundColor: `${color}25`, boxShadow: `0 0 16px ${color}40` }}
+      style={{ backgroundColor: `${color}20` }}
     >
       <Icon className="w-5 h-5" style={{ color }} strokeWidth={2.2} />
     </div>
@@ -70,9 +74,9 @@ function IconBadge({ icon: Icon, color, size = 'md' }: {
 
 // ─── stat card ────────────────────────────────────────────────────────────────
 
-function StatCard({ icon, color, label, value, unit, sub, loading }: {
+function StatCard({ icon, color, label, value, unit, sub, subColor, loading }: {
   icon: React.ElementType; color: string; label: string;
-  value: number | string | null; unit?: string; sub?: string; loading?: boolean;
+  value: number | string | null; unit?: string; sub?: string; subColor?: string; loading?: boolean;
 }) {
   return (
     <Card>
@@ -86,7 +90,12 @@ function StatCard({ icon, color, label, value, unit, sub, loading }: {
           {unit && <span className="text-sm font-medium text-muted-foreground">{unit}</span>}
         </div>
       )}
-      {sub && <p className="text-xs mt-1.5 font-medium" style={{ color }}>{sub}</p>}
+      {sub && (
+        <p className="text-xs mt-1.5 font-medium"
+          style={{ color: subColor ?? 'hsl(var(--muted-foreground))' }}>
+          {sub}
+        </p>
+      )}
     </Card>
   );
 }
@@ -114,14 +123,15 @@ function RecoveryCard({ trends, score, loading }: {
   trends: { date: string; score: number }[]; score: number | null; loading: boolean;
 }) {
   const { theme } = useTheme();
-  const grid = theme === 'dark' ? '#2a2a2a' : '#d4cec680';
-  const axis = theme === 'dark' ? '#555' : '#aaa';
+  const dark = theme === 'dark';
+  const grid = dark ? '#2a2a2a' : '#d4cec680';
+  const axis = dark ? '#555' : '#aaa';
 
   return (
     <Card>
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-3">
-          <IconBadge icon={Activity} color={C.lime} size="sm" />
+          <IconBadge icon={Activity} color={clay(dark)} size="sm" />
           <div>
             <p className="text-sm font-semibold text-foreground">Recovery</p>
             <p className="text-[11px] text-muted-foreground">Last 7 days</p>
@@ -129,10 +139,10 @@ function RecoveryCard({ trends, score, loading }: {
         </div>
         {loading ? <Sk className="h-10 w-16" /> : score != null ? (
           <div className="text-right">
-            <p className="text-3xl font-bold tabular-nums leading-none" style={{ color: recColor(score) }}>
+            <p className="text-3xl font-bold tabular-nums leading-none" style={{ color: recColor(score, dark) }}>
               {score}<span className="text-sm font-normal text-muted-foreground ml-0.5">%</span>
             </p>
-            <p className="text-[11px] mt-1 font-medium" style={{ color: recColor(score) }}>
+            <p className="text-[11px] mt-1 font-medium text-muted-foreground">
               {recZone(score)}
             </p>
           </div>
@@ -147,7 +157,7 @@ function RecoveryCard({ trends, score, loading }: {
             <YAxis domain={[0, 100]} hide />
             <Tooltip content={<ChartTip unit="%" />} cursor={{ fill: 'transparent' }} />
             <Bar dataKey="score" radius={[8, 8, 4, 4]}>
-              {trends.map((e, i) => <Cell key={i} fill={recColor(e.score)} fillOpacity={0.9} />)}
+              {trends.map((e, i) => <Cell key={i} fill={recColor(e.score, dark)} fillOpacity={0.85} />)}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
@@ -162,14 +172,16 @@ function HRVCard({ trends, hrv, loading }: {
   trends: { date: string; value: number }[]; hrv: number | null; loading: boolean;
 }) {
   const { theme } = useTheme();
-  const grid = theme === 'dark' ? '#2a2a2a' : '#d4cec680';
-  const axis = theme === 'dark' ? '#555' : '#aaa';
+  const dark = theme === 'dark';
+  const grid = dark ? '#2a2a2a' : '#d4cec680';
+  const axis = dark ? '#555' : '#aaa';
+  const clayHex = clay(dark);
 
   return (
     <Card>
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-3">
-          <IconBadge icon={Heart} color={C.cyan} size="sm" />
+          <IconBadge icon={Heart} color={clayHex} size="sm" />
           <div>
             <p className="text-sm font-semibold text-foreground">HRV</p>
             <p className="text-[11px] text-muted-foreground">7-day trend</p>
@@ -177,7 +189,7 @@ function HRVCard({ trends, hrv, loading }: {
         </div>
         {loading ? <Sk className="h-10 w-16" /> : hrv != null ? (
           <div className="text-right">
-            <p className="text-3xl font-bold tabular-nums leading-none" style={{ color: C.cyan }}>
+            <p className="text-3xl font-bold tabular-nums leading-none text-foreground">
               {hrv}<span className="text-sm font-normal text-muted-foreground ml-0.5">ms</span>
             </p>
           </div>
@@ -188,8 +200,8 @@ function HRVCard({ trends, hrv, loading }: {
           <AreaChart data={trends} margin={{ left: -10, right: 4 }}>
             <defs>
               <linearGradient id="hrv-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={C.cyan} stopOpacity={0.35} />
-                <stop offset="95%" stopColor={C.cyan} stopOpacity={0} />
+                <stop offset="5%" stopColor={clayHex} stopOpacity={0.35} />
+                <stop offset="95%" stopColor={clayHex} stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} stroke={grid} />
@@ -197,11 +209,11 @@ function HRVCard({ trends, hrv, loading }: {
               tick={{ fontSize: 11, fill: axis }} axisLine={false} tickLine={false} />
             <YAxis hide />
             <Tooltip content={<ChartTip unit=" ms" />}
-              cursor={{ stroke: C.cyan, strokeWidth: 1, strokeDasharray: '4 2' }} />
-            <Area type="monotone" dataKey="value" stroke={C.cyan} strokeWidth={2.5}
+              cursor={{ stroke: clayHex, strokeWidth: 1, strokeDasharray: '4 2' }} />
+            <Area type="monotone" dataKey="value" stroke={clayHex} strokeWidth={2}
               fill="url(#hrv-grad)"
-              dot={{ fill: C.cyan, r: 4, strokeWidth: 0 }}
-              activeDot={{ fill: C.cyan, r: 6, strokeWidth: 0 }} />
+              dot={{ fill: clayHex, r: 3, strokeWidth: 0 }}
+              activeDot={{ fill: clayHex, r: 5, strokeWidth: 0 }} />
           </AreaChart>
         </ResponsiveContainer>
       ) : <p className="text-xs mt-2 text-muted-foreground">No trend data yet.</p>}
@@ -213,17 +225,17 @@ function HRVCard({ trends, hrv, loading }: {
 
 function SleepCard({ sleep, loading }: { sleep: WhoopSleep | null; loading: boolean }) {
   const segments = sleep ? [
-    { label: 'Deep',  color: C.purple, mins: sleep.stages.sws   },
-    { label: 'REM',   color: C.rem,    mins: sleep.stages.rem   },
-    { label: 'Light', color: C.light,  mins: sleep.stages.light },
-    { label: 'Awake', color: C.awake,  mins: sleep.stages.awake },
+    { label: 'Deep',  color: '#5C6B52', mins: sleep.stages.sws   },
+    { label: 'REM',   color: C.rem,     mins: sleep.stages.rem   },
+    { label: 'Light', color: C.light,   mins: sleep.stages.light },
+    { label: 'Awake', color: C.awake,   mins: sleep.stages.awake },
   ] : [];
   const total = segments.reduce((s, x) => s + x.mins, 0);
 
   return (
     <Card className="flex flex-col">
       <div className="flex items-center gap-3 mb-5">
-        <IconBadge icon={Moon} color={C.purple} size="sm" />
+        <IconBadge icon={Moon} color="#5C6B52" size="sm" />
         <p className="text-sm font-semibold text-foreground">Sleep</p>
       </div>
       {loading ? (
@@ -264,7 +276,6 @@ function SleepCard({ sleep, loading }: { sleep: WhoopSleep | null; loading: bool
                     style={{
                       width: total ? `${(seg.mins / total) * 100}%` : '0%',
                       backgroundColor: seg.color,
-                      boxShadow: `0 0 8px ${seg.color}60`,
                     }}
                   />
                 </div>
@@ -286,7 +297,7 @@ function WorkoutsCard({ workouts, loading }: { workouts: WhoopWorkout[]; loading
   return (
     <Card>
       <div className="flex items-center gap-3 mb-5">
-        <IconBadge icon={Zap} color={C.orange} size="sm" />
+        <IconBadge icon={Zap} color={C.moderate} size="sm" />
         <p className="text-sm font-semibold text-foreground">Recent Workouts</p>
       </div>
       {loading ? (
@@ -311,8 +322,7 @@ function WorkoutsCard({ workouts, loading }: { workouts: WhoopWorkout[]; loading
               <div className="flex items-center gap-2.5">
                 <span className="text-[11px] tabular-nums text-muted-foreground">{w.avgHr} bpm</span>
                 <span
-                  className="text-xs font-bold tabular-nums px-2.5 py-1 rounded-full"
-                  style={{ background: `${C.orange}20`, color: C.orange, boxShadow: `0 0 10px ${C.orange}30` }}
+                  className="text-xs font-medium tabular-nums px-2.5 py-1 rounded-sm bg-secondary text-muted-foreground"
                 >
                   {w.strain}
                 </span>
@@ -329,6 +339,8 @@ function WorkoutsCard({ workouts, loading }: { workouts: WhoopWorkout[]; loading
 
 export default function Whoop() {
   const { data, isLoading, isError } = useWhoop();
+  const { theme } = useTheme();
+  const dark = theme === 'dark';
   const recovery = data?.recovery?.scoreState === 'SCORED' ? (data.recovery as WhoopRecovery) : null;
 
   if (isError) {
@@ -344,12 +356,13 @@ export default function Whoop() {
       <main className="max-w-5xl mx-auto px-6 py-8">
         <SectionTitle title="Health" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
-          <StatCard icon={Heart} color={recovery?.score != null ? recColor(recovery.score) : C.lime}
+          <StatCard icon={Heart}
+            color={recovery?.score != null ? recColor(recovery.score, dark) : clay(dark)}
             label="Recovery" value={recovery?.score ?? null} unit="%" loading={isLoading}
             sub={recovery?.score != null ? recZone(recovery.score) : undefined} />
-          <StatCard icon={Activity} color={C.cyan} label="HRV" value={recovery?.hrv ?? null} unit="ms" loading={isLoading} />
-          <StatCard icon={Heart} color={C.pink} label="Resting HR" value={recovery?.rhr ?? null} unit="bpm" loading={isLoading} />
-          <StatCard icon={Zap} color={C.orange} label="Day Strain" value={data?.strain?.score ?? null} unit="/ 21" loading={isLoading} />
+          <StatCard icon={Activity} color={clay(dark)} label="HRV" value={recovery?.hrv ?? null} unit="ms" loading={isLoading} />
+          <StatCard icon={Heart} color={C.low} label="Resting HR" value={recovery?.rhr ?? null} unit="bpm" loading={isLoading} />
+          <StatCard icon={Zap} color={C.moderate} label="Day Strain" value={data?.strain?.score ?? null} unit="/ 21" loading={isLoading} />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
           <RecoveryCard trends={data?.trends?.recovery ?? []} score={recovery?.score ?? null} loading={isLoading} />

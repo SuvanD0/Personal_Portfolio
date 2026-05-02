@@ -20,7 +20,7 @@ const Index = () => {
             href={spotifyData.songUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground hover:underline font-medium"
+            className="text-clay-ember hover:opacity-80 transition-opacity font-medium"
           >
             {spotifyData.title}
           </a>
@@ -36,7 +36,7 @@ const Index = () => {
           href={spotifyData.songUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-foreground hover:underline font-medium"
+          className="text-clay-ember hover:opacity-80 transition-opacity font-medium"
         >
           {spotifyData.title}
         </a>
@@ -65,7 +65,7 @@ const Index = () => {
               Right now, I'm learning everything I can from the people building the next generation of products from internal developer platforms to AI tooling.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              Im originally from the Midwest. I spend my free time exploring new places, listening to <a href="https://www.last.fm/user/Suvan_Dommeti" target="_blank" rel="noopener noreferrer" className="font-semibold text-foreground underline hover:opacity-80 transition-opacity">music</a>, or folding <a href="/origami" className="font-semibold text-foreground underline hover:opacity-80 transition-opacity">origami</a>.
+              Im originally from the Midwest. I spend my free time exploring new places, listening to <a href="https://www.last.fm/user/Suvan_Dommeti" target="_blank" rel="noopener noreferrer" className="font-semibold text-clay-ember hover:opacity-80 transition-opacity">music</a>, or folding origami.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
               {getSpotifyText()}
