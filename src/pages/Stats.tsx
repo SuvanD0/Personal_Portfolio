@@ -1,9 +1,8 @@
-import { useSpotify } from '@/hooks/useSpotify';
 import { useSpotifyStats } from '@/hooks/useSpotifyStats';
 import { useSpotifyHeatmap } from '@/hooks/useSpotifyHeatmap';
 import { useTheme } from '@/hooks/useTheme';
 import SectionTitle from '@/components/common/SectionTitle';
-import { SpotifyRecentTrack, SpotifyTopTrack, SpotifyArtist } from '@/services/spotifyStats';
+import { SpotifyTopTrack, SpotifyArtist } from '@/services/spotifyStats';
 import { useState } from 'react';
 
 const CLAY_LIGHT = '#B06B52';
@@ -15,16 +14,6 @@ function fmtDuration(ms: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-function fmtRelative(isoString: string): string {
-  const diff = Date.now() - new Date(isoString).getTime();
-  const m = Math.floor(diff / 60000);
-  const h = Math.floor(m / 60);
-  const d = Math.floor(h / 24);
-  if (d > 0) return `${d}d ago`;
-  if (h > 0) return `${h}h ago`;
-  if (m > 0) return `${m}m ago`;
-  return 'just now';
-}
 
 function Skeleton({ className }: { className?: string }) {
   return <div className={`animate-pulse rounded bg-border ${className ?? ''}`} />;
@@ -78,11 +67,12 @@ function HeatGrid({ dark }: { dark: boolean }) {
   const lookup = new Map<string, number>();
   (data?.data ?? []).forEach(d => lookup.set(d.date, d.count));
 
-  // Span from earliest data date to today
+  // Always show 90 days; extend further back if data reaches beyond that
   const dates = data?.data?.map(d => d.date) ?? [];
-  const earliest = dates.length > 0 ? dates[0] : (() => {
-    const d = new Date(today); d.setDate(today.getDate() - 90); return d.toISOString().slice(0, 10);
-  })();
+  const oneYearAgo = new Date(today);
+  oneYearAgo.setDate(today.getDate() - 364);
+  const oneYearAgoStr = oneYearAgo.toISOString().slice(0, 10);
+  const earliest = dates.length > 0 && dates[0] < oneYearAgoStr ? dates[0] : oneYearAgoStr;
   const startDate = new Date(earliest + 'T12:00:00');
   const DAYS = Math.ceil((today.getTime() - startDate.getTime()) / 86400000) + 1;
 
@@ -117,10 +107,10 @@ function HeatGrid({ dark }: { dark: boolean }) {
   return (
     <div className="relative select-none">
       {/* Month labels */}
-      <div className="flex mb-1 ml-8 text-[10px] text-muted-foreground">
+      <div className="flex mb-1 ml-7 text-[9px] text-muted-foreground">
         {Array.from({ length: totalCols }).map((_, col) => {
           const lbl = monthLabels.find(m => m.col === col);
-          return <div key={col} className="w-[13px] mr-[2px] flex-shrink-0">{lbl?.label ?? ''}</div>;
+          return <div key={col} className="w-[11px] mr-[2px] flex-shrink-0">{lbl?.label ?? ''}</div>;
         })}
       </div>
 
@@ -128,7 +118,7 @@ function HeatGrid({ dark }: { dark: boolean }) {
         {/* Day-of-week labels */}
         <div className="flex flex-col mr-1.5">
           {DOW.map((d, i) => (
-            <div key={d} className="text-[10px] text-muted-foreground h-[13px] mb-[2px] w-6 flex items-center">
+            <div key={d} className="text-[9px] text-muted-foreground h-[11px] mb-[2px] w-5 flex items-center">
               {i % 2 === 0 ? d : ''}
             </div>
           ))}
@@ -141,13 +131,13 @@ function HeatGrid({ dark }: { dark: boolean }) {
               {Array.from({ length: 7 }).map((_, row) => {
                 const idx = col * 7 + row - padStart;
                 if (idx < 0 || idx >= cells.length) {
-                  return <div key={row} className="w-[13px] h-[13px] rounded-[2px] opacity-0" />;
+                  return <div key={row} className="w-[11px] h-[11px] rounded-[2px] opacity-0" />;
                 }
                 const cell = cells[idx];
                 return (
                   <div
                     key={row}
-                    className="w-[13px] h-[13px] rounded-[2px] cursor-default transition-opacity duration-100 hover:opacity-80"
+                    className="w-[11px] h-[11px] rounded-[2px] cursor-default transition-opacity duration-100 hover:opacity-80"
                     style={{ backgroundColor: cellColor(cell.count, dark) }}
                     onMouseEnter={e => {
                       const rect = (e.target as HTMLElement).getBoundingClientRect();
@@ -218,31 +208,9 @@ function TrackRow({ track, index }: { track: SpotifyTopTrack; index: number }) {
   );
 }
 
-function RecentRow({ track }: { track: SpotifyRecentTrack }) {
-  return (
-    <a
-      href={track.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center justify-between py-2.5 border-b border-border last:border-0 group"
-    >
-      <div className="min-w-0">
-        <p className="text-sm text-foreground truncate group-hover:text-clay-ember transition-colors duration-150">
-          {track.name}
-          <span className="text-muted-foreground font-normal"> · {track.artist}</span>
-        </p>
-      </div>
-      <span className="text-xs tabular-nums text-muted-foreground flex-shrink-0 ml-4">
-        {fmtRelative(track.playedAt)}
-      </span>
-    </a>
-  );
-}
-
 // ─── page ─────────────────────────────────────────────────────────────────────
 
 export default function Stats() {
-  const { data: nowPlaying } = useSpotify();
   const { data: stats, isLoading, isError } = useSpotifyStats();
   const { theme } = useTheme();
   const dark = theme === 'dark';
@@ -250,34 +218,6 @@ export default function Stats() {
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-100">
       <main className="max-w-3xl mx-auto px-6 py-6 space-y-16">
-
-        {/* Now playing */}
-        <section>
-          <SectionTitle title="Listening" />
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {!nowPlaying || !nowPlaying.title ? (
-              'Not currently listening to anything.'
-            ) : nowPlaying.isPlaying ? (
-              <>
-                Currently listening to{' '}
-                <a href={nowPlaying.songUrl} target="_blank" rel="noopener noreferrer"
-                  className="text-clay-ember hover:opacity-80 transition-opacity font-medium">
-                  {nowPlaying.title}
-                </a>
-                {' '}by {nowPlaying.artist}.
-              </>
-            ) : (
-              <>
-                Last played{' '}
-                <a href={nowPlaying.songUrl} target="_blank" rel="noopener noreferrer"
-                  className="text-clay-ember hover:opacity-80 transition-opacity font-medium">
-                  {nowPlaying.title}
-                </a>
-                {' '}by {nowPlaying.artist}.
-              </>
-            )}
-          </p>
-        </section>
 
         {/* Top artists — typographic flow */}
         <section>
@@ -329,26 +269,6 @@ export default function Stats() {
           )}
         </section>
 
-        {/* Recently played */}
-        <section>
-          <SectionTitle title="Recently Played" />
-          {isLoading ? (
-            <div className="space-y-2">
-              {[0, 1, 2, 3, 4].map(i => (
-                <div key={i} className="flex justify-between items-center py-2.5 border-b border-border">
-                  <Skeleton className="h-4 w-48" />
-                  <Skeleton className="h-3 w-12" />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>
-              {(stats?.recentlyPlayed ?? []).map((track, i) => (
-                <RecentRow key={`${track.name}-${track.playedAt}`} track={track} />
-              ))}
-            </div>
-          )}
-        </section>
 
       </main>
     </div>
