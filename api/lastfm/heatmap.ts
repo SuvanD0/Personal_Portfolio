@@ -1,16 +1,38 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { kv } from '@vercel/kv';
 
 const API_KEY = process.env.LASTFM_API_KEY;
 const USER = process.env.LASTFM_USERNAME;
 const BASE = 'https://ws.audioscrobbler.com/2.0/';
 const BATCH_SIZE = 10;
 const KV_KEY = 'lastfm:heatmap';
-const KV_AVAILABLE = !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+const KV_AVAILABLE = !!(REDIS_URL && REDIS_TOKEN);
 
 interface HeatmapCache {
   counts: Record<string, number>;
   cachedThrough: string; // YYYY-MM-DD, last fully-stored day (always yesterday or earlier)
+}
+
+async function kvGet<T>(key: string): Promise<T | null> {
+  if (!KV_AVAILABLE) return null;
+  const res = await fetch(`${REDIS_URL}/get/${encodeURIComponent(key)}`, {
+    headers: { Authorization: `Bearer ${REDIS_TOKEN}` },
+  });
+  if (!res.ok) return null;
+  const data = await res.json() as { result: string | null };
+  if (!data.result) return null;
+  try { return JSON.parse(data.result) as T; } catch { return null; }
+}
+
+async function kvSet<T>(key: string, value: T): Promise<void> {
+  if (!KV_AVAILABLE) return;
+  // POST body form handles arbitrarily large JSON; path-style fails on long URLs.
+  await fetch(`${REDIS_URL}/set/${encodeURIComponent(key)}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${REDIS_TOKEN}` },
+    body: JSON.stringify(value),
+  });
 }
 
 function buildUrl(page: number, from?: number) {
@@ -85,7 +107,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (KV_AVAILABLE) {
       try {
-        const cached = await kv.get<HeatmapCache>(KV_KEY);
+        const cached = await kvGet<HeatmapCache>(KV_KEY);
 
         if (cached) {
           historicalCounts = cached.counts;
@@ -99,12 +121,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             for (const [date, count] of Object.entries(newCounts)) {
               historicalCounts[date] = (historicalCounts[date] ?? 0) + count;
             }
-            await kv.set<HeatmapCache>(KV_KEY, { counts: historicalCounts, cachedThrough: yesterdayStr });
+            await kvSet<HeatmapCache>(KV_KEY, { counts: historicalCounts, cachedThrough: yesterdayStr });
           }
         } else {
           // First run — full history fetch, store everything except today
           historicalCounts = await fetchScrobbles(undefined, today);
-          await kv.set<HeatmapCache>(KV_KEY, { counts: historicalCounts, cachedThrough: yesterdayStr });
+          await kvSet<HeatmapCache>(KV_KEY, { counts: historicalCounts, cachedThrough: yesterdayStr });
         }
       } catch (kvErr) {
         console.error('KV error, falling back to full fetch:', kvErr);
