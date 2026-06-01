@@ -35,7 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const headers = { Authorization: `Bearer ${token}` };
 
     const [artistsRes, tracksRes, recentRes] = await Promise.all([
-      fetch('https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=50', { headers }),
+      fetch('https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=10', { headers }),
       fetch('https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10', { headers }),
       fetch('https://api.spotify.com/v1/me/player/recently-played?limit=10', { headers }),
     ]);

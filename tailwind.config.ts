@@ -20,7 +20,7 @@ export default {
     },
     extend: {
       colors: {
-        'clay-ember': 'hsl(var(--clay-ember))',
+        'sage-moss': 'hsl(var(--sage-moss))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

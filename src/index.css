@@ -5,46 +5,45 @@
 @layer base {
   :root {
     /* Light mode colors (default) */
-    --background: 45 35% 89%; /* Warm beige (#ECE7DA) */
-    --foreground: 0 0% 13%; /* Near black (#212121) */
-    --clay-ember: 16 37% 51%; /* Muted terracotta (#B06B52) */
-    --clay-ember-subtle: 16 37% 51% / 0.1;
+    --background: 45 35% 89%;          /* Toasted Linen (#ECE7DA) */
+    --foreground: 0 0% 13%;             /* Near black (#212121) */
+    --sage-moss: 118 23% 46%;           /* Sage Moss accent (#5E915C) */
+    --sage-moss-subtle: 118 23% 46% / 0.1;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 13%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 13%;
-    --primary: 0 0% 13%; /* Dark gray/near black (#222222) */
+    --primary: 0 0% 13%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 93%; /* Light gray (#EEEEEE) */
+    --secondary: 0 0% 93%;              /* Pearl Gray (#EEEEEE) */
     --secondary-foreground: 0 0% 13%;
-    --muted: 0 0% 0%; /* Black for underlines in light mode */
-    --muted-foreground: 0 0% 40%; /* Medium gray (#666666) */
+    --muted: 0 0% 0%;
+    --muted-foreground: 0 0% 40%;       /* Stone Mid (#666666) */
     --accent: 0 0% 93%;
     --accent-foreground: 0 0% 13%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 93%; /* Light gray (#EEEEEE) */
+    --border: 0 0% 93%;
     --input: 0 0% 93%;
-    --ring: 0 0% 13%; /* Dark gray/near black (#222222) */
+    --ring: 0 0% 13%;
     --radius: 0.5rem;
   }
 
   .dark {
-    /* Dark mode colors - inverted hierarchy from light mode */
-    --background: 120 2% 12%; /* #1E1F1E */
-    --clay-ember: 16 43% 57%; /* Muted terracotta dark (#C07B62) */
-    --clay-ember-subtle: 16 43% 57% / 0.1;
-    --foreground: 0 0% 93%; /* Light gray (#EEEEEE) - inverted from light mode's dark text */
-    --card: 0 0% 20%; /* Slightly lighter than background */
+    --background: 120 2% 12%;           /* Moss Shadow (#1E1F1E) */
+    --foreground: 0 0% 93%;             /* Ash Light (#EDEDED) */
+    --sage-moss: 115 23% 56%;           /* Sage Moss accent dark (#75A872) */
+    --sage-moss-subtle: 115 23% 56% / 0.1;
+    --card: 0 0% 20%;
     --card-foreground: 0 0% 93%;
     --popover: 0 0% 20%;
     --popover-foreground: 0 0% 93%;
-    --primary: 0 0% 93%; /* Light gray (#EEEEEE) - inverted from light mode's primary */
+    --primary: 0 0% 93%;
     --primary-foreground: 0 0% 13%;
-    --secondary: 0 0% 25%; /* Slightly lighter than background */
+    --secondary: 0 0% 25%;
     --secondary-foreground: 0 0% 93%;
     --muted: 0 0% 25%;
-    --muted-foreground: 0 0% 60%; /* Medium gray - inverted from light mode */
+    --muted-foreground: 0 0% 60%;
     --accent: 0 0% 25%;
     --accent-foreground: 0 0% 93%;
     --destructive: 0 62.8% 30.6%;
@@ -53,14 +52,14 @@
     --input: 0 0% 25%;
     --ring: 0 0% 93%;
   }
-  
+
   /* Add font configuration */
   html, body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, 
-                 "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", 
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
                  "Segoe UI Emoji", "Segoe UI Symbol";
   }
-  
+
   h1, h2 {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto,
                  "Helvetica Neue", Arial, sans-serif;
@@ -97,9 +96,9 @@
   .toggle-card {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .toggle-content {
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -107,7 +106,7 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: box-shadow 0.4s cubic-bezier(.25,.8,.25,1);
   }
-  
+
   .paper-shadow:hover {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   }
@@ -126,16 +125,16 @@
     transition-duration: 0.4s;
     transition-timing-function: ease-in-out;
   }
-  
+
   .hover-float {
     transform: translateY(0);
     transition: transform 0.4s ease-in-out;
   }
-  
+
   .hover-float:hover {
     transform: translateY(-5px);
   }
-  
+
   .heading {
     @apply text-foreground font-semibold tracking-tight;
   }

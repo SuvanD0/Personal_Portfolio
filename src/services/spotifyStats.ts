@@ -3,6 +3,7 @@ export interface SpotifyArtist {
   genres: string[];
   imageUrl: string | null;
   url: string;
+  playcount?: number;
 }
 
 export interface SpotifyTopTrack {
@@ -12,6 +13,7 @@ export interface SpotifyTopTrack {
   imageUrl: string | null;
   url: string;
   durationMs: number;
+  playcount?: number;
 }
 
 export interface SpotifyRecentTrack {
@@ -29,6 +31,6 @@ export interface SpotifyStatsData {
 
 export async function getSpotifyStats(): Promise<SpotifyStatsData> {
   const res = await fetch('/api/spotify/stats');
-  if (!res.ok) throw new Error('Failed to fetch Spotify stats');
+  if (!res.ok) throw new Error('Failed to fetch stats');
   return res.json();
 }

@@ -12,15 +12,15 @@ import {
 
 // ─── palette ──────────────────────────────────────────────────────────────────
 
-// Clay Ember hex values for recharts (CSS vars don't resolve in SVG attrs)
-const CLAY_LIGHT = '#B06B52';
-const CLAY_DARK  = '#C07B62';
-const clay = (dark: boolean) => dark ? CLAY_DARK : CLAY_LIGHT;
+// Sage Moss hex values for recharts (CSS vars don't resolve in SVG attrs)
+const SAGE_LIGHT = '#5E915C';
+const SAGE_DARK  = '#75A872';
+const sage = (dark: boolean) => dark ? SAGE_DARK : SAGE_LIGHT;
 
 const C = {
-  optimal:  (dark: boolean) => clay(dark),
-  moderate: '#8A7560',  // warm mid-brown
-  low:      '#A05050',  // muted red
+  optimal:  (dark: boolean) => sage(dark),
+  moderate: '#84B362',  // Olive Pear (mid intensity)
+  low:      '#326A54',  // Forest Green (dim — signals lower state)
   rem:      '#6B7B5E',  // muted sage
   light:    '#8A9A80',  // lighter sage
   awake:    '#6b7280',
@@ -131,7 +131,7 @@ function RecoveryCard({ trends, score, loading }: {
     <Card>
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-3">
-          <IconBadge icon={Activity} color={clay(dark)} size="sm" />
+          <IconBadge icon={Activity} color={sage(dark)} size="sm" />
           <div>
             <p className="text-sm font-semibold text-foreground">Recovery</p>
             <p className="text-[11px] text-muted-foreground">Last 7 days</p>
@@ -175,13 +175,13 @@ function HRVCard({ trends, hrv, loading }: {
   const dark = theme === 'dark';
   const grid = dark ? '#2a2a2a' : '#d4cec680';
   const axis = dark ? '#555' : '#aaa';
-  const clayHex = clay(dark);
+  const sageHex = sage(dark);
 
   return (
     <Card>
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-3">
-          <IconBadge icon={Heart} color={clayHex} size="sm" />
+          <IconBadge icon={Heart} color={sageHex} size="sm" />
           <div>
             <p className="text-sm font-semibold text-foreground">HRV</p>
             <p className="text-[11px] text-muted-foreground">7-day trend</p>
@@ -200,8 +200,8 @@ function HRVCard({ trends, hrv, loading }: {
           <AreaChart data={trends} margin={{ left: -10, right: 4 }}>
             <defs>
               <linearGradient id="hrv-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={clayHex} stopOpacity={0.35} />
-                <stop offset="95%" stopColor={clayHex} stopOpacity={0} />
+                <stop offset="5%" stopColor={sageHex} stopOpacity={0.35} />
+                <stop offset="95%" stopColor={sageHex} stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} stroke={grid} />
@@ -209,11 +209,11 @@ function HRVCard({ trends, hrv, loading }: {
               tick={{ fontSize: 11, fill: axis }} axisLine={false} tickLine={false} />
             <YAxis hide />
             <Tooltip content={<ChartTip unit=" ms" />}
-              cursor={{ stroke: clayHex, strokeWidth: 1, strokeDasharray: '4 2' }} />
-            <Area type="monotone" dataKey="value" stroke={clayHex} strokeWidth={2}
+              cursor={{ stroke: sageHex, strokeWidth: 1, strokeDasharray: '4 2' }} />
+            <Area type="monotone" dataKey="value" stroke={sageHex} strokeWidth={2}
               fill="url(#hrv-grad)"
-              dot={{ fill: clayHex, r: 3, strokeWidth: 0 }}
-              activeDot={{ fill: clayHex, r: 5, strokeWidth: 0 }} />
+              dot={{ fill: sageHex, r: 3, strokeWidth: 0 }}
+              activeDot={{ fill: sageHex, r: 5, strokeWidth: 0 }} />
           </AreaChart>
         </ResponsiveContainer>
       ) : <p className="text-xs mt-2 text-muted-foreground">No trend data yet.</p>}
@@ -357,10 +357,10 @@ export default function Whoop() {
         <SectionTitle title="Health" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
           <StatCard icon={Heart}
-            color={recovery?.score != null ? recColor(recovery.score, dark) : clay(dark)}
+            color={recovery?.score != null ? recColor(recovery.score, dark) : sage(dark)}
             label="Recovery" value={recovery?.score ?? null} unit="%" loading={isLoading}
             sub={recovery?.score != null ? recZone(recovery.score) : undefined} />
-          <StatCard icon={Activity} color={clay(dark)} label="HRV" value={recovery?.hrv ?? null} unit="ms" loading={isLoading} />
+          <StatCard icon={Activity} color={sage(dark)} label="HRV" value={recovery?.hrv ?? null} unit="ms" loading={isLoading} />
           <StatCard icon={Heart} color={C.low} label="Resting HR" value={recovery?.rhr ?? null} unit="bpm" loading={isLoading} />
           <StatCard icon={Zap} color={C.moderate} label="Day Strain" value={data?.strain?.score ?? null} unit="/ 21" loading={isLoading} />
         </div>

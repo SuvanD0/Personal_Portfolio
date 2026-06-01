@@ -3,10 +3,10 @@ import { useSpotifyHeatmap } from '@/hooks/useSpotifyHeatmap';
 import { useTheme } from '@/hooks/useTheme';
 import SectionTitle from '@/components/common/SectionTitle';
 import { SpotifyTopTrack, SpotifyArtist } from '@/services/spotifyStats';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
-const CLAY_LIGHT = '#B06B52';
-const CLAY_DARK  = '#C07B62';
+const SAGE_LIGHT = '#5E915C';
+const SAGE_DARK  = '#75A872';
 
 function fmtDuration(ms: number): string {
   const m = Math.floor(ms / 60000);
@@ -22,7 +22,7 @@ function Skeleton({ className }: { className?: string }) {
 // ─── artist flow ──────────────────────────────────────────────────────────────
 
 function ArtistFlow({ artists, dark }: { artists: SpotifyArtist[]; dark: boolean }) {
-  const clay = dark ? CLAY_DARK : CLAY_LIGHT;
+  const sage = dark ? SAGE_DARK : SAGE_LIGHT;
   return (
     <p className="text-2xl font-bold leading-snug tracking-tight">
       {artists.map((a, i) => (
@@ -31,7 +31,7 @@ function ArtistFlow({ artists, dark }: { artists: SpotifyArtist[]; dark: boolean
             href={a.url}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: clay }}
+            style={{ color: sage }}
             className="hover:opacity-70 transition-opacity duration-150"
           >
             {a.name}
@@ -47,19 +47,37 @@ function ArtistFlow({ artists, dark }: { artists: SpotifyArtist[]; dark: boolean
 
 // ─── heat grid ────────────────────────────────────────────────────────────────
 
-function cellColor(count: number, dark: boolean): string {
-  const clay = dark ? CLAY_DARK : CLAY_LIGHT;
-  if (count === 0) return dark ? '#2a2a2a' : '#e8e3da';
-  if (count <= 3)  return `${clay}33`;
-  if (count <= 8)  return `${clay}66`;
-  if (count <= 15) return `${clay}99`;
-  if (count <= 25) return `${clay}cc`;
-  return clay;
+// scheme2: deep teal → forest → sage → olive → lime → bright yellow-green
+const SCHEME_DARK  = ['#1a1a1a', '#02404C', '#326A54', '#5E915C', '#84B362', '#ADD76A', '#DAFF71'];
+const SCHEME_LIGHT = ['#eeecea', '#02404C', '#326A54', '#5E915C', '#84B362', '#ADD76A', '#DAFF71'];
+
+// Bucket cutoffs as % of max — progressively wider so peak color is rare
+const CUTOFFS = [0.05, 0.15, 0.30, 0.50, 0.75];
+
+function buildThresholds(max: number): number[] {
+  return CUTOFFS.map((p, i) => Math.max(i + 1, Math.round(max * p)));
+}
+
+function cellColor(count: number, dark: boolean, thresholds: number[]): string {
+  const s = dark ? SCHEME_DARK : SCHEME_LIGHT;
+  if (count === 0) return s[0];
+  for (let i = 0; i < thresholds.length; i++) {
+    if (count <= thresholds[i]) return s[i + 1];
+  }
+  return s[s.length - 1];
 }
 
 function HeatGrid({ dark }: { dark: boolean }) {
   const { data, isLoading } = useSpotifyHeatmap();
   const [tooltip, setTooltip] = useState<{ date: string; count: number; x: number; y: number } | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to most recent (right) when data loads
+  useEffect(() => {
+    if (!isLoading && scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    }
+  }, [isLoading]);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -67,7 +85,10 @@ function HeatGrid({ dark }: { dark: boolean }) {
   const lookup = new Map<string, number>();
   (data?.data ?? []).forEach(d => lookup.set(d.date, d.count));
 
-  // Always show 90 days; extend further back if data reaches beyond that
+  const max = Math.max(1, ...((data?.data ?? []).map(d => d.count)));
+  const thresholds = buildThresholds(max);
+
+  // Show all available history
   const dates = data?.data?.map(d => d.date) ?? [];
   const oneYearAgo = new Date(today);
   oneYearAgo.setDate(today.getDate() - 364);
@@ -106,6 +127,7 @@ function HeatGrid({ dark }: { dark: boolean }) {
 
   return (
     <div className="relative select-none">
+      <div ref={scrollRef} className="overflow-x-auto pb-1">
       {/* Month labels */}
       <div className="flex mb-1 ml-7 text-[9px] text-muted-foreground">
         {Array.from({ length: totalCols }).map((_, col) => {
@@ -138,7 +160,7 @@ function HeatGrid({ dark }: { dark: boolean }) {
                   <div
                     key={row}
                     className="w-[11px] h-[11px] rounded-[2px] cursor-default transition-opacity duration-100 hover:opacity-80"
-                    style={{ backgroundColor: cellColor(cell.count, dark) }}
+                    style={{ backgroundColor: cellColor(cell.count, dark, thresholds) }}
                     onMouseEnter={e => {
                       const rect = (e.target as HTMLElement).getBoundingClientRect();
                       setTooltip({ date: cell.date, count: cell.count, x: rect.left, y: rect.top });
@@ -151,6 +173,7 @@ function HeatGrid({ dark }: { dark: boolean }) {
           ))}
         </div>
       </div>
+      </div>{/* end scrollable */}
 
       {/* Tooltip */}
       {tooltip && (
@@ -170,8 +193,8 @@ function HeatGrid({ dark }: { dark: boolean }) {
       {/* Legend */}
       <div className="flex items-center gap-1.5 mt-3 justify-end">
         <span className="text-[10px] text-muted-foreground">Less</span>
-        {[0, 3, 8, 15, 25, 30].map(n => (
-          <div key={n} className="w-[11px] h-[11px] rounded-[2px]" style={{ backgroundColor: cellColor(n, dark) }} />
+        {[0, 1, thresholds[0] + 1, thresholds[1] + 1, thresholds[2] + 1, thresholds[3] + 1, thresholds[4] + 1].map((n, i) => (
+          <div key={i} className="w-[11px] h-[11px] rounded-[2px]" style={{ backgroundColor: cellColor(n, dark, thresholds) }} />
         ))}
         <span className="text-[10px] text-muted-foreground">More</span>
       </div>
@@ -195,14 +218,14 @@ function TrackRow({ track, index }: { track: SpotifyTopTrack; index: number }) {
           <img src={track.imageUrl} alt={track.album} className="w-9 h-9 rounded-sm object-cover flex-shrink-0" />
         )}
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-foreground truncate group-hover:text-clay-ember transition-colors duration-150">
+          <p className="text-sm font-semibold text-foreground truncate group-hover:text-sage-moss transition-colors duration-150">
             {track.name}
           </p>
           <p className="text-xs text-muted-foreground truncate mt-0.5">{track.artist}</p>
         </div>
       </div>
       <span className="text-xs tabular-nums text-muted-foreground flex-shrink-0 ml-4">
-        {fmtDuration(track.durationMs)}
+        {track.playcount ? `${track.playcount.toLocaleString()} plays` : fmtDuration(track.durationMs)}
       </span>
     </a>
   );
@@ -222,7 +245,7 @@ export default function Stats() {
         {/* Top artists — typographic flow */}
         <section>
           <SectionTitle title="Top Artists" />
-          <p className="text-xs text-muted-foreground mb-5">Last 6 months</p>
+          <p className="text-xs text-muted-foreground mb-5">Last 4 weeks</p>
           {isLoading ? (
             <div className="space-y-3">
               <Skeleton className="h-8 w-full" />

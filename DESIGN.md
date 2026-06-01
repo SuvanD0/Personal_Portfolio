@@ -7,11 +7,17 @@ colors:
   ghost-white: "#FFFFFF"
   pearl-gray: "#EEEEEE"
   stone-mid: "#666666"
-  clay-ember: "#B06B52"
   moss-shadow: "#1E1F1E"
   ash-light: "#EDEDED"
   charcoal-lift: "#333333"
   graphite-mid: "#404040"
+  sage-moss: "#5E915C"
+  sage-moss-dark: "#75A872"
+  deep-teal: "#02404C"
+  forest-green: "#326A54"
+  olive-pear: "#84B362"
+  light-lime: "#ADD76A"
+  bright-yellowgreen: "#DAFF71"
 typography:
   display:
     fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif"
@@ -70,7 +76,7 @@ components:
     rounded: "{rounded.md}"
     padding: "16px"
   accent-link:
-    textColor: "{colors.clay-ember}"
+    textColor: "{colors.sage-moss}"
     backgroundColor: "transparent"
     rounded: "{rounded.sm}"
     padding: "0"
@@ -80,7 +86,7 @@ components:
     rounded: "{rounded.sm}"
     padding: "8px"
   nav-link-hover:
-    textColor: "{colors.clay-ember}"
+    textColor: "{colors.sage-moss}"
     backgroundColor: "transparent"
     rounded: "{rounded.sm}"
     padding: "8px"
@@ -94,24 +100,39 @@ components:
 
 This is a portfolio for a builder who tracks everything: what he listens to, how he sleeps, what he ships. The design follows the same discipline. Nothing is here to look good — everything is here because it carries information. The aesthetic is clean and restrained, referencing the precision of claude.ai and the substance-first personality of dvdrod.com.
 
-The system runs in two modes. Light mode uses Toasted Linen — a warm, slightly amber cream that feels like a well-used notebook. Dark mode uses Moss Shadow — a dark green-gray that reads as deliberate and grounded, not default-dark. Clay Ember, a muted terracotta, appears in both modes as the single accent: interaction states, hover emphasis, the occasional inline link. It earns its presence by being rare.
+The system runs in two modes. Light mode uses Toasted Linen — a warm, slightly amber cream that feels like a well-used notebook. Dark mode uses Moss Shadow — a dark green-gray that reads as deliberate and grounded, not default-dark. Sage Moss, a muted forest green, appears in both modes as the single chromatic accent: interactive text links, hover emphasis, the occasional inline highlight. It earns its presence by being rare. For data visualization (listening heatmaps, frequency grids), a six-step palette ramps from Deep Teal to Bright Yellow-Green — used only where intensity needs to be encoded into color.
 
 The palette, typography, and component behavior reject every generic portfolio pattern: no hero with floating badges, no identical card grids, no gradient text. Personality comes through data and specificity — what Suvan tracks, builds, and cares about — not decorative flourish.
 
 **Key Characteristics:**
 - Dual-mode: Toasted Linen (light) / Moss Shadow (dark), each intentional
-- Single natural accent: Clay Ember (#B06B52), used at ≤10% of any surface
+- Single chromatic accent: Sage Moss (#5E915C light / #75A872 dark), used at ≤10% of any surface
+- Data-viz ramp: Deep Teal → Forest → Sage → Olive → Lime → Bright Yellow-Green, reserved for intensity encoding
 - System sans throughout (SF Pro / Inter) — fast, familiar, never precious
 - Max-w-3xl centered column; body text capped at 65–75ch
 - Cards reveal; they don't stack decoratively
 - Flat by default, lifted on interaction (paper-shadow pattern)
 
-## 2. Colors: The Toasted Linen Palette
+## 2. Colors: The Toasted Linen + Moss Palette
 
-Two complete mode palettes unified by a single natural accent. Neither mode is the default — both are fully realized.
+Two complete mode palettes unified by a single natural accent, plus a narrow data-viz ramp. Neither mode is the default — both are fully realized.
 
 ### Primary (Accent)
-- **Clay Ember** (`#B06B52` / oklch(52% 0.09 35)): The only chromatic color in the system. Muted terracotta — earthy, warm, never loud. Used for interactive text links, hover states on nav items, and subtle data highlights. Appears in both modes. Light mode: on Toasted Linen. Dark mode: on Moss Shadow.
+- **Sage Moss** (`#5E915C` light / `#75A872` dark): The only chromatic color in the system for static UI chrome. Muted forest green — earthy, alive, never loud. Used for interactive text links, hover states on nav items, and the single most important metric in a stat group. Light variant on Toasted Linen; brighter variant in dark mode for contrast on Moss Shadow.
+
+### Data Visualization Ramp
+A six-step intensity scale, used exclusively for surfaces that encode magnitude into color (listening heatmaps, frequency grids, density maps). Never used for static UI chrome.
+
+| Step | Hex | Role |
+| :--- | :--- | :--- |
+| 0 | `#02404C` | Deep Teal / Dark Sea Blue — lowest non-zero activity |
+| 1 | `#326A54` | Forest Green |
+| 2 | `#5E915C` | Sage / Moss Green (shared with primary accent) |
+| 3 | `#84B362` | Olive / Pear Green |
+| 4 | `#ADD76A` | Light Lime |
+| 5 | `#DAFF71` | Bright Yellow-Green — reserved for peak / maximum |
+
+Bucket cutoffs are computed dynamically from the data's max value (5%, 15%, 30%, 50%, 75% — progressively wider buckets so the top color is rare). Empty cells use the page neutral surface (`#eeecea` light, `#1a1a1a` dark), not a ramp step.
 
 ### Neutral — Light Mode
 - **Toasted Linen** (`#ECE7DA`): Page background in light mode. Warm beige with amber undertones — reads as lived-in rather than sterile. Not pure white; the warmth is the point.
@@ -127,9 +148,11 @@ Two complete mode palettes unified by a single natural accent. Neither mode is t
 - **Graphite Mid** (`#404040`): Secondary surfaces; input fills, borders, muted containers.
 
 ### Named Rules
-**The One Ember Rule.** Clay Ember is used on ≤10% of any given surface, in both light and dark modes. Its rarity is exactly what makes it land. If you reach for it more than once per section, remove one instance.
+**The One Moss Rule.** Sage Moss is used on ≤10% of any given surface, in both light and dark modes. Its rarity is exactly what makes it land. If you reach for it more than once per section, remove one instance.
 
-**The No-Pure-White Rule.** Light mode backgrounds are never #FFFFFF at the page level. Toasted Linen is the canvas. Ghost White is reserved for cards that need to float above it.
+**The No-Pure-White Rule.** Light mode backgrounds are never `#FFFFFF` at the page level. Toasted Linen is the canvas. Ghost White is reserved for cards that need to float above it.
+
+**The Ramp-For-Data-Only Rule.** The six-step Deep Teal → Bright Yellow-Green palette is reserved for visualizations that encode intensity. It never appears as UI chrome, button fills, or decorative gradients. Static UI uses Sage Moss alone.
 
 ## 3. Typography
 
@@ -155,7 +178,7 @@ This system is flat by default. Surfaces rest on the page; depth appears only as
 
 The `paper-shadow` class is the one exception: it applies a layered ambient shadow (1px + 2px, low opacity) at rest, then lifts dramatically on hover (`28px` blur, higher opacity). This pattern is reserved for interactive card elements — TiltedCard and similar — where the lift is a response to user attention, not decoration.
 
-Nav items, role cards, and tags use background tint for hover state (rgba(0,0,0,0.04) in light mode), never a shadow.
+Nav items, role cards, and tags use background tint for hover state (`rgba(0,0,0,0.04)` in light mode), never a shadow.
 
 ### Shadow Vocabulary
 - **Ambient resting** (`0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)`): Light resting elevation for interactive card elements. Barely visible at rest.
@@ -188,7 +211,7 @@ Centered at max-w-3xl. Name on the left at headline weight; icon links + theme t
 
 - **Name link:** Headline weight (600), full Ink Well / Ash Light; opacity 0.8 on hover
 - **Icon links:** 16×16px Lucide icons; Ink Well / Ash Light; opacity 0.7 default, 1.0 on hover
-- **Active accent:** Clay Ember (`#B06B52`) on nav link hover text (used sparingly, not on the name)
+- **Active accent:** Sage Moss (`#5E915C` / `#75A872`) on nav link hover text (used sparingly, not on the name)
 - **Theme toggle:** Animated rotation (90° at 500ms ease-in-out)
 
 ### Tilted Card (Gallery / Feature)
@@ -199,19 +222,31 @@ Centered at max-w-3xl. Name on the left at headline weight; icon links + theme t
 - **Tilt:** CSS transform perspective, subtle (not exceeding ±10°)
 - **Use:** Only where the tilt adds contextual delight — not as default card treatment
 
-### Stat / Data Panel (Planned — Stats Page)
-For the stats page and Whoop data surface. Display-level numbers with label beneath.
+### Stat / Data Panel (Stats & Whoop Pages)
+For the stats page and Whoop health data surface. Display-level numbers with label beneath.
 
 - **Number:** Display scale (clamp 1.75–2.5rem), weight 700, Ink Well / Ash Light
 - **Label:** Label scale (0.75rem), weight 500, Stone Mid / Graphite Mid
 - **Layout:** Inline flow or grid; never identical-card-grid pattern
-- **Accent use:** Clay Ember on the single most important metric per group, used once
+- **Accent use:** Sage Moss on the single most important metric per group, used once
+- **Status indicators (Whoop):** Optimal → Sage Moss; Moderate → Olive Pear (`#84B362`); Low → Forest Green (`#326A54`). Status colors map directly to positions in the data-viz ramp.
+
+### Heatmap (Listening History)
+A GitHub-style contribution grid with dynamic, max-relative thresholds. Used on the Stats page for Last.fm scrobble density.
+
+- **Cell size:** 11×11px, 2px gap
+- **Empty cell:** Neutral surface tone (`#eeecea` light / `#1a1a1a` dark) — not a ramp step
+- **Active cells:** Six-step ramp (Deep Teal → Bright Yellow-Green)
+- **Bucket cutoffs:** Computed from the user's max-scrobble day. Cutoffs at 5%, 15%, 30%, 50%, 75% of max — top color is reserved for the top ~25% of activity, so peaks read clearly
+- **Container:** Horizontally scrollable; auto-scrolls to the most recent date on mount
+- **Tooltip:** Card background, border, small label-scale text on hover
 
 ## 6. Do's and Don'ts
 
 ### Do:
 - **Do** use Toasted Linen (`#ECE7DA`) as the light mode page background — never pure white at the page level.
-- **Do** cap Clay Ember at ≤10% of any surface. One use per section maximum.
+- **Do** cap Sage Moss at ≤10% of any surface. One use per section maximum.
+- **Do** reserve the Deep Teal → Bright Yellow-Green ramp exclusively for intensity-encoded data viz.
 - **Do** use system font stack throughout. No web font imports.
 - **Do** tighten heading letter-spacing: −0.01em at headline size, −0.02em at display size.
 - **Do** cap body text at 65–75ch per line. Set max-w-3xl (768px) or narrower.
@@ -225,6 +260,7 @@ For the stats page and Whoop data surface. Display-level numbers with label bene
 - **Don't** create identical card grids: same-sized cards, same icon + heading + text structure repeated. Use varied entry formats.
 - **Don't** use `border-left` greater than 1px as a colored stripe on cards, callouts, or list items. Rewrite with full borders or background tints.
 - **Don't** use glassmorphism (backdrop-filter blur + semi-transparent panel) decoratively. If blur appears, it must be load-bearing.
-- **Don't** add a second accent color. Clay Ember is the only chromatic value in the system.
+- **Don't** add a second accent color. Sage Moss is the only chromatic value in the system for UI chrome (the data-viz ramp is a separate, narrowly scoped exception).
+- **Don't** apply the data-viz ramp to buttons, links, or decorative gradients. It is a visualization tool, not a brand palette.
 - **Don't** display health data, stats, or Spotify data with the hero-metric template (big number, gradient card, supporting stat row). That is a SaaS dashboard cliché. Find a form that fits the content.
 - **Don't** use bounce or elastic easing. Ease-out-quart or cubic-bezier(0.4, 0, 0.2, 1) for state changes; ease-in-out for longer sequences.
