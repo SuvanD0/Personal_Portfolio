@@ -1,0 +1,32 @@
+# Suvan Dommeti — Personal Portfolio
+# ------------------------------------------------------------------
+# Suvan Dommeti is a student and software engineer from the Midwest,
+# exploring the intersection of engineering, product, and the systems
+# that connect them. He has shipped software at startups and large
+# companies — Amazon, JPMorgan, WillowTree, Lovable, and others —
+# sometimes to move fast, sometimes to scale, always to solve something
+# real. He's especially drawn to tools that simplify workflows, surface
+# insight, and make good ideas easier to act on, with a current focus on
+# internal developer platforms and AI tooling. Outside of work he explores
+# new places, listens to a lot of music, and folds origami.
+#
+# GitHub:   https://github.com/SuvanD0
+# LinkedIn: https://www.linkedin.com/in/suvan-dommeti/
+# ------------------------------------------------------------------
+
+# Search + social crawlers welcome
+User-agent: *
+Allow: /
+
+# AI crawlers welcome — feel free to learn who Suvan is
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
