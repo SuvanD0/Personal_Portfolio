@@ -13,9 +13,18 @@ export const useTheme = () => {
 
   useEffect(() => {
     const root = document.documentElement;
+    // Suppress all color transitions for the frame the theme swaps so every
+    // element repaints to the new palette at once (no per-element flash).
+    root.classList.add('theme-switching');
     root.classList.remove('light', 'dark', 'fun');
     root.classList.add(theme);
     localStorage.setItem('theme', theme);
+    // Force a reflow, then drop the guard on the next frame.
+    void root.offsetHeight;
+    const id = window.requestAnimationFrame(() => {
+      root.classList.remove('theme-switching');
+    });
+    return () => window.cancelAnimationFrame(id);
   }, [theme]);
 
   const toggleTheme = () => {

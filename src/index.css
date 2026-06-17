@@ -90,6 +90,14 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* While the theme is swapping, freeze all transitions so every element
+     repaints to the new palette in the same frame (prevents color flash). */
+  .theme-switching *,
+  .theme-switching *::before,
+  .theme-switching *::after {
+    transition: none !important;
+  }
 }
 
 @layer components {
