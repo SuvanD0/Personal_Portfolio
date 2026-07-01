@@ -49,24 +49,6 @@ See it all live at `/styleguide`.
 - **Charts** — Recharts + custom sparklines
 - **Deploy** — Vercel (with Web Analytics)
 
-## Getting Started
-
-```bash
-# install
-npm install
-
-# run the dev server (http://localhost:8080)
-npm run dev
-
-# type-check + production build
-npm run build
-
-# preview the production build
-npm run preview
-```
-
-WHOOP and Spotify integrations expect credentials in `.env.local` — see `.env.local` for the required keys.
-
 ## Project Structure
 
 ```
