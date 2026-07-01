@@ -9,13 +9,13 @@ interface SectionTitleProps {
 
 const SectionTitle = ({ title, className, resumeLink }: SectionTitleProps) => {
   return (
-    <div className="flex justify-between items-center mb-6 border-b border-border pb-2 transition-colors duration-100">
-      <h2 className={cn("text-lg font-semibold text-primary heading", className)}>
+    <div className="flex justify-between items-center mb-6 border-b border-foreground/25 pb-2 transition-colors duration-100">
+      <h2 className={cn("font-heading text-xl font-semibold text-primary heading", className)}>
         {title}
       </h2>
       {resumeLink && (
         <a href={resumeLink} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm" className="border border-dashed hover:border-primary hover:text-primary transition-colors duration-100 text-xs">
+          <Button variant="outline" size="sm" className="border border-dashed border-foreground/40 hover:border-primary hover:text-primary transition-colors duration-100 text-xs">
             Resume
           </Button>
         </a>

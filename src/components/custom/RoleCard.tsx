@@ -42,8 +42,8 @@ const RoleCard = ({
     <div className="flex items-center space-x-4">
       {logo && <div className="w-8 h-8 flex items-center justify-center overflow-hidden">{logo}</div>}
       <div>
-        {company && <h3 className="font-semibold text-foreground">{company}</h3>}
-        {title && <h3 className="font-semibold text-foreground">{title}</h3>}
+        {company && <h3 className="font-body font-semibold text-foreground">{company}</h3>}
+        {title && <h3 className="font-body font-semibold text-foreground">{title}</h3>}
         {role && <p className="text-sm text-muted-foreground">{role}</p>}
         {description && !role && <p className="text-sm text-muted-foreground">{description}</p>}
       </div>
@@ -59,9 +59,9 @@ const RoleCard = ({
   );
 
   return (
-    <div className="mb-3 rounded-lg transition-colors duration-300 bg-background">
-      <div 
-        className="p-4 flex justify-between items-center cursor-pointer hover:bg-muted/20 transition-colors duration-200 rounded-lg"
+    <div className="mb-3 rounded-xl transition-colors duration-300 bg-background">
+      <div
+        className="p-4 flex justify-between items-center cursor-pointer hover:bg-muted/20 transition-colors duration-200 rounded-xl"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center space-x-3">
@@ -97,7 +97,7 @@ const RoleCard = ({
             {tags && tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3">
                 {tags.map(tag => (
-                  <span key={tag} className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-sm hover:bg-secondary/80 transition-colors duration-200">
+                  <span key={tag} className="px-2 py-1 bg-[hsl(var(--sage-moss-subtle))] text-sage-moss font-medium text-xs rounded-md hover:opacity-80 transition-opacity duration-200">
                     {tag}
                   </span>
                 ))}

@@ -1,337 +1,293 @@
+import { useEffect, useRef } from 'react';
+import { animate, stagger } from 'animejs';
 import { useWhoop } from '@/hooks/useWhoop';
-import { WhoopRecovery, WhoopSleep, WhoopWorkout } from '@/services/whoop';
+import { WhoopRecovery } from '@/services/whoop';
 import SectionTitle from '@/components/common/SectionTitle';
 import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/utils';
-import { Heart, Activity, Zap, Moon } from 'lucide-react';
-import {
-  BarChart, Bar, AreaChart, Area,
-  XAxis, YAxis, Tooltip, ResponsiveContainer,
-  Cell, CartesianGrid,
-} from 'recharts';
+import Sparkline from '@/components/whoop/Sparkline';
+import CountUp from '@/components/whoop/CountUp';
 
-// ─── palette ──────────────────────────────────────────────────────────────────
-
-// Sage Moss hex values for recharts (CSS vars don't resolve in SVG attrs)
 const SAGE_LIGHT = '#5E915C';
-const SAGE_DARK  = '#75A872';
-const sage = (dark: boolean) => dark ? SAGE_DARK : SAGE_LIGHT;
-
-const C = {
-  optimal:  (dark: boolean) => sage(dark),
-  moderate: '#84B362',  // Olive Pear (mid intensity)
-  low:      '#326A54',  // Forest Green (dim — signals lower state)
-  rem:      '#6B7B5E',  // muted sage
-  light:    '#8A9A80',  // lighter sage
-  awake:    '#6b7280',
-} as const;
-
-// ─── helpers ──────────────────────────────────────────────────────────────────
-
-const recColor = (s: number, dark = false) =>
-  s >= 67 ? C.optimal(dark) : s >= 34 ? C.moderate : C.low;
-const recZone  = (s: number) => s >= 67 ? 'Optimal' : s >= 34 ? 'Moderate' : 'Low';
+const SAGE_DARK = '#75A872';
 
 const fmtMins = (m: number) => {
-  const h = Math.floor(m / 60), min = m % 60;
+  const h = Math.floor(m / 60);
+  const min = Math.round(m % 60);
   return h ? `${h}h ${min.toString().padStart(2, '0')}m` : `${min}m`;
 };
-const fmtDay = (d: string) => new Date(d).toLocaleDateString('en-US', { weekday: 'short' });
-const fmtRel = (d: string) => {
-  const days = Math.floor((Date.now() - new Date(d).getTime()) / 86_400_000);
-  return days === 0 ? 'today' : days === 1 ? 'yesterday' : `${days}d ago`;
-};
 
-// ─── base card ────────────────────────────────────────────────────────────────
+const recZone = (s: number) =>
+  s >= 67 ? 'Optimal' : s >= 34 ? 'Moderate' : 'Low';
 
-function Card({ children, className }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={cn('bg-card border border-border rounded-lg p-6', className)}>
-      {children}
-    </div>
-  );
+function avg(xs: number[]) {
+  if (!xs.length) return null;
+  return xs.reduce((a, b) => a + b, 0) / xs.length;
 }
 
-function Sk({ className }: { className?: string }) {
-  return <div className={cn('animate-pulse rounded-2xl bg-border', className)} />;
+function Skeleton({ className }: { className?: string }) {
+  return <div className={cn('animate-pulse rounded-md bg-border/60', className)} />;
 }
 
-// ─── icon badge ───────────────────────────────────────────────────────────────
+// ─── Fitness ──────────────────────────────────────────────────────────────────
 
-function IconBadge({ icon: Icon, color, size = 'md' }: {
-  icon: React.ElementType; color: string; size?: 'sm' | 'md';
+function FitnessSection({
+  recovery,
+  strain,
+  trendRecovery,
+  trendHrv,
+  sage,
+  loading,
+}: {
+  recovery: WhoopRecovery | null;
+  strain: number | null;
+  trendRecovery: number[];
+  trendHrv: number[];
+  sage: string;
+  loading: boolean;
 }) {
-  const dim = size === 'md' ? 'w-10 h-10' : 'w-8 h-8';
-  return (
-    <div
-      className={cn('rounded-2xl flex items-center justify-center flex-shrink-0', dim)}
-      style={{ backgroundColor: `${color}20` }}
-    >
-      <Icon className="w-5 h-5" style={{ color }} strokeWidth={2.2} />
-    </div>
-  );
-}
+  // Insight: HRV last value vs prior 7d avg.
+  const insight = (() => {
+    if (trendHrv.length < 8) return null;
+    const latest = trendHrv[trendHrv.length - 1];
+    const prior = avg(trendHrv.slice(-8, -1));
+    if (latest == null || prior == null) return null;
+    const delta = latest - prior;
+    const pct = (delta / prior) * 100;
+    if (Math.abs(pct) < 2) return 'HRV holding steady vs last week';
+    const sign = delta > 0 ? '+' : '−';
+    return `HRV ${sign}${Math.abs(Math.round(pct))}% vs 7-day average`;
+  })();
 
-// ─── stat card ────────────────────────────────────────────────────────────────
-
-function StatCard({ icon, color, label, value, unit, sub, subColor, loading }: {
-  icon: React.ElementType; color: string; label: string;
-  value: number | string | null; unit?: string; sub?: string; subColor?: string; loading?: boolean;
-}) {
   return (
-    <Card>
-      <div className="flex items-center gap-3 mb-4">
-        <IconBadge icon={icon} color={color} size="md" />
-        <span className="text-sm font-medium text-muted-foreground">{label}</span>
+    <article className="whoop-card border-b border-border pb-10">
+      <header className="flex items-baseline justify-between mb-6">
+        <h3 className="font-body text-sm font-semibold tracking-wide uppercase text-muted-foreground">
+          Fitness
+        </h3>
+        <span className="text-[11px] text-muted-foreground/80">today</span>
+      </header>
+
+      <div className="flex items-end gap-8 flex-wrap mb-6">
+        <div>
+          <div className="flex items-baseline">
+            {loading ? (
+              <Skeleton className="h-14 w-28" />
+            ) : (
+              <>
+                <CountUp
+                  value={recovery?.score ?? null}
+                  className="text-6xl md:text-7xl font-light tabular-nums leading-none text-foreground"
+                />
+                <span className="text-2xl font-light text-muted-foreground ml-1">%</span>
+              </>
+            )}
+          </div>
+          <p className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">
+            {loading ? <Skeleton className="h-3 w-16 inline-block" /> : (
+              <>recovery · {recovery?.score != null ? recZone(recovery.score) : '—'}</>
+            )}
+          </p>
+        </div>
+
+        <div className="flex gap-6 mb-1">
+          <Metric
+            label="HRV"
+            value={recovery?.hrv ?? null}
+            suffix=" ms"
+            loading={loading}
+          />
+          <Metric
+            label="Strain"
+            value={strain}
+            decimals={1}
+            loading={loading}
+          />
+        </div>
       </div>
-      {loading ? <Sk className="h-9 w-20 mt-1" /> : (
-        <div className="flex items-baseline gap-1.5">
-          <span className="text-3xl font-bold tabular-nums text-foreground">{value ?? '—'}</span>
-          {unit && <span className="text-sm font-medium text-muted-foreground">{unit}</span>}
+
+      <div className="mb-3">
+        {loading ? (
+          <Skeleton className="h-[60px] w-full" />
+        ) : (
+          <Sparkline
+            values={trendRecovery}
+            color={sage}
+            domain={[0, 100]}
+            height={60}
+            className="w-full h-[60px]"
+          />
+        )}
+      </div>
+      <p className="text-[11px] text-muted-foreground/70 mb-3">
+        Recovery · last 30 days
+      </p>
+
+      {insight && (
+        <p className="text-xs text-foreground/70 italic">{insight}</p>
+      )}
+    </article>
+  );
+}
+
+// ─── Sleep ────────────────────────────────────────────────────────────────────
+
+function SleepSection({
+  sleepMinutes,
+  performance,
+  stages,
+  trendSleep,
+  sage,
+  loading,
+}: {
+  sleepMinutes: number | null;
+  performance: number | null;
+  stages: { light: number; rem: number; sws: number; awake: number } | null;
+  trendSleep: number[];
+  sage: string;
+  loading: boolean;
+}) {
+  const insight = (() => {
+    if (trendSleep.length < 14) return null;
+    const thisWeek = avg(trendSleep.slice(-7));
+    const lastWeek = avg(trendSleep.slice(-14, -7));
+    if (thisWeek == null || lastWeek == null) return null;
+    const deltaMin = Math.round(thisWeek - lastWeek);
+    if (Math.abs(deltaMin) < 6) {
+      return `Averaging ${fmtMins(Math.round(thisWeek))} this week — flat vs last`;
+    }
+    const sign = deltaMin > 0 ? '+' : '−';
+    return `Averaging ${fmtMins(Math.round(thisWeek))} this week, ${sign}${fmtMins(Math.abs(deltaMin))} vs last`;
+  })();
+
+  const total = stages
+    ? stages.sws + stages.rem + stages.light + stages.awake
+    : 0;
+
+  return (
+    <article className="whoop-card pt-10">
+      <header className="flex items-baseline justify-between mb-6">
+        <h3 className="font-body text-sm font-semibold tracking-wide uppercase text-muted-foreground">
+          Sleep
+        </h3>
+        <span className="text-[11px] text-muted-foreground/80">last night</span>
+      </header>
+
+      <div className="flex items-end gap-8 flex-wrap mb-6">
+        <div>
+          <div className="flex items-baseline">
+            {loading ? (
+              <Skeleton className="h-14 w-40" />
+            ) : sleepMinutes != null ? (
+              <SleepHero minutes={sleepMinutes} />
+            ) : (
+              <span className="text-6xl md:text-7xl font-light text-muted-foreground">—</span>
+            )}
+          </div>
+          <p className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">
+            {loading ? (
+              <Skeleton className="h-3 w-20 inline-block" />
+            ) : performance != null ? (
+              <>{performance}% of need</>
+            ) : (
+              '—'
+            )}
+          </p>
+        </div>
+      </div>
+
+      {/* Sleep stage bar — single thin row */}
+      {!loading && stages && total > 0 && (
+        <div className="mb-6">
+          <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-border/60">
+            {[
+              { mins: stages.sws, color: sage, op: 1 },
+              { mins: stages.rem, color: sage, op: 0.65 },
+              { mins: stages.light, color: sage, op: 0.35 },
+              { mins: stages.awake, color: 'currentColor', op: 0.15 },
+            ].map((s, i) => (
+              <div
+                key={i}
+                style={{
+                  width: `${(s.mins / total) * 100}%`,
+                  backgroundColor: s.color,
+                  opacity: s.op,
+                }}
+              />
+            ))}
+          </div>
+          <div className="mt-2 flex justify-between text-[10px] uppercase tracking-wider text-muted-foreground/70">
+            <span>Deep {fmtMins(stages.sws)}</span>
+            <span>REM {fmtMins(stages.rem)}</span>
+            <span>Light {fmtMins(stages.light)}</span>
+            <span>Awake {fmtMins(stages.awake)}</span>
+          </div>
         </div>
       )}
-      {sub && (
-        <p className="text-xs mt-1.5 font-medium"
-          style={{ color: subColor ?? 'hsl(var(--muted-foreground))' }}>
-          {sub}
+
+      <div className="mb-3">
+        {loading ? (
+          <Skeleton className="h-[60px] w-full" />
+        ) : (
+          <Sparkline
+            values={trendSleep}
+            color={sage}
+            height={60}
+            className="w-full h-[60px]"
+          />
+        )}
+      </div>
+      <p className="text-[11px] text-muted-foreground/70 mb-3">
+        Sleep duration · last 30 days
+      </p>
+
+      {insight && (
+        <p className="text-xs text-foreground/70 italic">{insight}</p>
+      )}
+    </article>
+  );
+}
+
+// ─── small metric ─────────────────────────────────────────────────────────────
+
+function Metric({
+  label,
+  value,
+  decimals,
+  suffix,
+  loading,
+}: {
+  label: string;
+  value: number | null;
+  decimals?: number;
+  suffix?: string;
+  loading: boolean;
+}) {
+  return (
+    <div>
+      <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">
+        {label}
+      </p>
+      {loading ? (
+        <Skeleton className="h-6 w-14" />
+      ) : (
+        <p className="text-xl font-light tabular-nums text-foreground">
+          <CountUp value={value} decimals={decimals ?? 0} suffix={suffix} />
         </p>
       )}
-    </Card>
-  );
-}
-
-// ─── recharts tooltip ─────────────────────────────────────────────────────────
-
-function ChartTip({ active, payload, label, unit }: {
-  active?: boolean; payload?: { value: number }[]; label?: string; unit?: string;
-}) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="bg-card border border-border rounded-2xl px-3 py-2 text-xs shadow-xl">
-      <p className="text-muted-foreground mb-0.5">{label ? fmtDay(label) : ''}</p>
-      <p className="font-bold text-foreground">
-        {payload[0].value}
-        {unit && <span className="text-muted-foreground ml-1 font-normal">{unit}</span>}
-      </p>
     </div>
   );
 }
 
-// ─── recovery chart card ──────────────────────────────────────────────────────
-
-function RecoveryCard({ trends, score, loading }: {
-  trends: { date: string; score: number }[]; score: number | null; loading: boolean;
-}) {
-  const { theme } = useTheme();
-  const dark = theme === 'dark';
-  const grid = dark ? '#2a2a2a' : '#d4cec680';
-  const axis = dark ? '#555' : '#aaa';
-
+// Sleep hero — counts up duration then formats as "Xh YYm"
+function SleepHero({ minutes }: { minutes: number }) {
   return (
-    <Card>
-      <div className="flex items-start justify-between mb-5">
-        <div className="flex items-center gap-3">
-          <IconBadge icon={Activity} color={sage(dark)} size="sm" />
-          <div>
-            <p className="text-sm font-semibold text-foreground">Recovery</p>
-            <p className="text-[11px] text-muted-foreground">Last 7 days</p>
-          </div>
-        </div>
-        {loading ? <Sk className="h-10 w-16" /> : score != null ? (
-          <div className="text-right">
-            <p className="text-3xl font-bold tabular-nums leading-none" style={{ color: recColor(score, dark) }}>
-              {score}<span className="text-sm font-normal text-muted-foreground ml-0.5">%</span>
-            </p>
-            <p className="text-[11px] mt-1 font-medium text-muted-foreground">
-              {recZone(score)}
-            </p>
-          </div>
-        ) : null}
-      </div>
-      {loading ? <Sk className="h-40 w-full" /> : trends.length > 0 ? (
-        <ResponsiveContainer width="100%" height={160}>
-          <BarChart data={trends} barSize={28} margin={{ left: -10, right: 4 }}>
-            <CartesianGrid vertical={false} stroke={grid} strokeDasharray="0" />
-            <XAxis dataKey="date" tickFormatter={fmtDay}
-              tick={{ fontSize: 11, fill: axis }} axisLine={false} tickLine={false} />
-            <YAxis domain={[0, 100]} hide />
-            <Tooltip content={<ChartTip unit="%" />} cursor={{ fill: 'transparent' }} />
-            <Bar dataKey="score" radius={[8, 8, 4, 4]}>
-              {trends.map((e, i) => <Cell key={i} fill={recColor(e.score, dark)} fillOpacity={0.85} />)}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      ) : <p className="text-xs mt-2 text-muted-foreground">No trend data yet.</p>}
-    </Card>
-  );
-}
-
-// ─── HRV chart card ───────────────────────────────────────────────────────────
-
-function HRVCard({ trends, hrv, loading }: {
-  trends: { date: string; value: number }[]; hrv: number | null; loading: boolean;
-}) {
-  const { theme } = useTheme();
-  const dark = theme === 'dark';
-  const grid = dark ? '#2a2a2a' : '#d4cec680';
-  const axis = dark ? '#555' : '#aaa';
-  const sageHex = sage(dark);
-
-  return (
-    <Card>
-      <div className="flex items-start justify-between mb-5">
-        <div className="flex items-center gap-3">
-          <IconBadge icon={Heart} color={sageHex} size="sm" />
-          <div>
-            <p className="text-sm font-semibold text-foreground">HRV</p>
-            <p className="text-[11px] text-muted-foreground">7-day trend</p>
-          </div>
-        </div>
-        {loading ? <Sk className="h-10 w-16" /> : hrv != null ? (
-          <div className="text-right">
-            <p className="text-3xl font-bold tabular-nums leading-none text-foreground">
-              {hrv}<span className="text-sm font-normal text-muted-foreground ml-0.5">ms</span>
-            </p>
-          </div>
-        ) : null}
-      </div>
-      {loading ? <Sk className="h-40 w-full" /> : trends.length > 0 ? (
-        <ResponsiveContainer width="100%" height={160}>
-          <AreaChart data={trends} margin={{ left: -10, right: 4 }}>
-            <defs>
-              <linearGradient id="hrv-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={sageHex} stopOpacity={0.35} />
-                <stop offset="95%" stopColor={sageHex} stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid vertical={false} stroke={grid} />
-            <XAxis dataKey="date" tickFormatter={fmtDay}
-              tick={{ fontSize: 11, fill: axis }} axisLine={false} tickLine={false} />
-            <YAxis hide />
-            <Tooltip content={<ChartTip unit=" ms" />}
-              cursor={{ stroke: sageHex, strokeWidth: 1, strokeDasharray: '4 2' }} />
-            <Area type="monotone" dataKey="value" stroke={sageHex} strokeWidth={2}
-              fill="url(#hrv-grad)"
-              dot={{ fill: sageHex, r: 3, strokeWidth: 0 }}
-              activeDot={{ fill: sageHex, r: 5, strokeWidth: 0 }} />
-          </AreaChart>
-        </ResponsiveContainer>
-      ) : <p className="text-xs mt-2 text-muted-foreground">No trend data yet.</p>}
-    </Card>
-  );
-}
-
-// ─── sleep card ───────────────────────────────────────────────────────────────
-
-function SleepCard({ sleep, loading }: { sleep: WhoopSleep | null; loading: boolean }) {
-  const segments = sleep ? [
-    { label: 'Deep',  color: '#5C6B52', mins: sleep.stages.sws   },
-    { label: 'REM',   color: C.rem,     mins: sleep.stages.rem   },
-    { label: 'Light', color: C.light,   mins: sleep.stages.light },
-    { label: 'Awake', color: C.awake,   mins: sleep.stages.awake },
-  ] : [];
-  const total = segments.reduce((s, x) => s + x.mins, 0);
-
-  return (
-    <Card className="flex flex-col">
-      <div className="flex items-center gap-3 mb-5">
-        <IconBadge icon={Moon} color="#5C6B52" size="sm" />
-        <p className="text-sm font-semibold text-foreground">Sleep</p>
-      </div>
-      {loading ? (
-        <div className="space-y-4 flex-1">
-          <div className="grid grid-cols-3 gap-3 mb-2">
-            {[0,1,2].map(i => <div key={i}><Sk className="h-3 w-12 mb-2" /><Sk className="h-6 w-14" /></div>)}
-          </div>
-          {[0,1,2,3].map(i => (
-            <div key={i} className="flex items-center gap-3">
-              <Sk className="h-3 w-10" /><Sk className="h-3 flex-1 rounded-full" /><Sk className="h-3 w-10" />
-            </div>
-          ))}
-        </div>
-      ) : sleep ? (
-        <div className="flex-1">
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            {[
-              { label: 'Duration',   value: fmtMins(sleep.duration), unit: ''  },
-              { label: 'Perf',       value: sleep.performance,        unit: '%' },
-              { label: 'Efficiency', value: sleep.efficiency,         unit: '%' },
-            ].map(m => (
-              <div key={m.label}>
-                <p className="text-[10px] uppercase tracking-widest mb-1.5 text-muted-foreground">{m.label}</p>
-                <p className="text-lg font-bold tabular-nums text-foreground">
-                  {m.value}
-                  {m.unit && <span className="text-sm font-normal text-muted-foreground ml-0.5">{m.unit}</span>}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="space-y-3">
-            {segments.map(seg => (
-              <div key={seg.label} className="flex items-center gap-3">
-                <span className="text-[11px] w-10 text-right flex-shrink-0 text-muted-foreground">{seg.label}</span>
-                <div className="flex-1 h-2.5 rounded-full overflow-hidden bg-border">
-                  <div
-                    className="h-full rounded-full transition-all duration-700"
-                    style={{
-                      width: total ? `${(seg.mins / total) * 100}%` : '0%',
-                      backgroundColor: seg.color,
-                    }}
-                  />
-                </div>
-                <span className="text-[11px] tabular-nums w-12 flex-shrink-0 text-muted-foreground">
-                  {fmtMins(seg.mins)}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : <p className="text-sm text-muted-foreground">No sleep data available.</p>}
-    </Card>
-  );
-}
-
-// ─── workouts card ────────────────────────────────────────────────────────────
-
-function WorkoutsCard({ workouts, loading }: { workouts: WhoopWorkout[]; loading: boolean }) {
-  return (
-    <Card>
-      <div className="flex items-center gap-3 mb-5">
-        <IconBadge icon={Zap} color={C.moderate} size="sm" />
-        <p className="text-sm font-semibold text-foreground">Recent Workouts</p>
-      </div>
-      {loading ? (
-        <div className="space-y-1">
-          {[0,1,2,3,4].map(i => (
-            <div key={i} className="flex justify-between items-center py-3 border-b border-border last:border-0">
-              <div className="space-y-1.5"><Sk className="h-4 w-24" /><Sk className="h-3 w-14" /></div>
-              <Sk className="h-6 w-12 rounded-full" />
-            </div>
-          ))}
-        </div>
-      ) : workouts.length > 0 ? (
-        <div>
-          {workouts.slice(0, 5).map(w => (
-            <div key={w.id} className="flex items-center justify-between py-3 border-b border-border last:border-0">
-              <div>
-                <p className="text-sm font-semibold text-foreground">{w.sport}</p>
-                <p className="text-[11px] mt-0.5 text-muted-foreground">
-                  {fmtRel(w.date)} · {fmtMins(w.duration)}
-                </p>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <span className="text-[11px] tabular-nums text-muted-foreground">{w.avgHr} bpm</span>
-                <span
-                  className="text-xs font-medium tabular-nums px-2.5 py-1 rounded-sm bg-secondary text-muted-foreground"
-                >
-                  {w.strain}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : <p className="text-sm text-muted-foreground">No recent workouts.</p>}
-    </Card>
+    <CountUp
+      value={minutes}
+      duration={1100}
+      format={(n) => fmtMins(Math.round(n))}
+      className="text-6xl md:text-7xl font-light tabular-nums leading-none text-foreground"
+    />
   );
 }
 
@@ -340,38 +296,61 @@ function WorkoutsCard({ workouts, loading }: { workouts: WhoopWorkout[]; loading
 export default function Whoop() {
   const { data, isLoading, isError } = useWhoop();
   const { theme } = useTheme();
-  const dark = theme === 'dark';
-  const recovery = data?.recovery?.scoreState === 'SCORED' ? (data.recovery as WhoopRecovery) : null;
+  const sage = theme === 'dark' ? SAGE_DARK : SAGE_LIGHT;
+  const recovery =
+    data?.recovery?.scoreState === 'SCORED'
+      ? (data.recovery as WhoopRecovery)
+      : null;
+
+  // Stagger fade-in for the two sections on mount / when data lands
+  const rootRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!rootRef.current || isLoading) return;
+    const cards = rootRef.current.querySelectorAll<HTMLElement>('.whoop-card');
+    if (!cards.length) return;
+    animate(cards, {
+      opacity: [0, 1],
+      translateY: [8, 0],
+      duration: 700,
+      ease: 'outQuart',
+      delay: stagger(120),
+    });
+  }, [isLoading]);
 
   if (isError) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-sm text-muted-foreground">Unable to load health data. Check WHOOP credentials.</p>
+        <p className="text-sm text-muted-foreground">
+          Unable to load health data.
+        </p>
       </div>
     );
   }
 
+  const trendRecovery = (data?.trends?.recovery ?? []).map((p) => p.score);
+  const trendHrv = (data?.trends?.hrv ?? []).map((p) => p.value);
+  const trendSleep = (data?.trends?.sleep ?? []).map((p) => p.minutes);
+
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-100">
-      <main className="max-w-5xl mx-auto px-6 py-8">
+      <main ref={rootRef} className="max-w-3xl mx-auto px-6 py-6">
         <SectionTitle title="Health" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
-          <StatCard icon={Heart}
-            color={recovery?.score != null ? recColor(recovery.score, dark) : sage(dark)}
-            label="Recovery" value={recovery?.score ?? null} unit="%" loading={isLoading}
-            sub={recovery?.score != null ? recZone(recovery.score) : undefined} />
-          <StatCard icon={Activity} color={sage(dark)} label="HRV" value={recovery?.hrv ?? null} unit="ms" loading={isLoading} />
-          <StatCard icon={Heart} color={C.low} label="Resting HR" value={recovery?.rhr ?? null} unit="bpm" loading={isLoading} />
-          <StatCard icon={Zap} color={C.moderate} label="Day Strain" value={data?.strain?.score ?? null} unit="/ 21" loading={isLoading} />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
-          <RecoveryCard trends={data?.trends?.recovery ?? []} score={recovery?.score ?? null} loading={isLoading} />
-          <HRVCard trends={data?.trends?.hrv ?? []} hrv={recovery?.hrv ?? null} loading={isLoading} />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <SleepCard sleep={data?.sleep ?? null} loading={isLoading} />
-          <WorkoutsCard workouts={data?.workouts ?? []} loading={isLoading} />
-        </div>
+        <FitnessSection
+          recovery={recovery}
+          strain={data?.strain?.score ?? null}
+          trendRecovery={trendRecovery}
+          trendHrv={trendHrv}
+          sage={sage}
+          loading={isLoading}
+        />
+        <SleepSection
+          sleepMinutes={data?.sleep?.duration ?? null}
+          performance={data?.sleep?.performance ?? null}
+          stages={data?.sleep?.stages ?? null}
+          trendSleep={trendSleep}
+          sage={sage}
+          loading={isLoading}
+        />
       </main>
     </div>
   );

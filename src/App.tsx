@@ -16,6 +16,7 @@ import Header from './components/layout/Header';
 import Whoop from './pages/Whoop';
 import WhoopAuth from './pages/WhoopAuth';
 import Stats from './pages/Stats';
+import StyleGuide from './pages/StyleGuide';
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ const AppContent = () => {
             <Route path="/whoop" element={<Whoop />} />
             <Route path="/whoop-auth" element={<WhoopAuth />} />
             <Route path="/stats" element={<Stats />} />
+            <Route path="/styleguide" element={<StyleGuide />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

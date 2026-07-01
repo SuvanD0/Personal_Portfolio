@@ -19,8 +19,16 @@ export default {
       }
     },
     extend: {
+      fontFamily: {
+        heading: ['"Playfair Display"', 'Georgia', 'serif'],
+        body: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+      },
       colors: {
         'sage-moss': 'hsl(var(--sage-moss))',
+        tertiary: {
+          DEFAULT: 'hsl(var(--tertiary))',
+          foreground: 'hsl(var(--tertiary-foreground))',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

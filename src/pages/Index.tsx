@@ -52,7 +52,7 @@ const Index = () => {
         {/* Introduction */}
         <section className="mb-8">
           <div className="mb-6">
-            <h2 className="text-lg font-semibold inline-flex items-center">
+            <h2 className="font-heading text-3xl font-semibold inline-flex items-center">
               <span className="mr-2">👋</span>
               Welcome to My Portfolio
             </h2>
@@ -60,13 +60,13 @@ const Index = () => {
               I'm a student exploring engineering, product, and the systems that connect them.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              I've built software at startups and large companies—sometimes to ship fast, sometimes to scale, always to solve something real. I'm especially drawn to tools that simplify workflows, surface insight, or make good ideas easier to act on.
+              I've built software at startups and large companies, sometimes to ship fast, sometimes to scale, always to solve something real. I'm especially drawn to tools that simplify workflows, surface insight, or make good ideas easier to act on.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              Right now, I'm learning everything I can from the people building the next generation of products from internal developer platforms to AI tooling.
+              Right now, I'm learning everything I can from the people building the next generation of products, from internal developer platforms to AI tooling.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              Im originally from the Midwest. I spend my free time exploring new places, listening to <Link to="/stats" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">music</Link>, or folding origami.
+              I'm originally from the Midwest. Somewhere along the way I started tracking parts of my life, and it stuck. Some of it is about optimizing what I care about most, like my <Link to="/whoop" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">health and fitness</Link>. Some of it is just making sure I'm still doing the things I love, like <Link to="/origami" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">origami</Link> and <Link to="/stats" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">music</Link>. The data isn't the point. It's a way to stay honest with myself about how I'm actually spending my time.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
               {getSpotifyText()}

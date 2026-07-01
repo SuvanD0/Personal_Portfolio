@@ -13,7 +13,7 @@ const iconMap: Record<string, JSX.Element> = {
 const Header = ({ onLightMode }: { onLightMode?: () => void }) => {
   return (
     <header className="py-6 flex justify-between items-center w-full max-w-3xl mx-auto px-6">
-      <Link to="/" className="text-xl font-semibold tracking-tight hover:opacity-80 transition-opacity">Suvan Dommeti</Link>
+      <Link to="/" className="font-heading text-2xl font-semibold tracking-tight hover:opacity-80 transition-opacity">Suvan Dommeti</Link>
       
       <div className="flex items-center space-x-3">
         {personalLinks.map(link => (

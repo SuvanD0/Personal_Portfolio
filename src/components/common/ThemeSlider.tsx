@@ -17,7 +17,7 @@ const ThemeSlider = ({ onLightMode }: { onLightMode?: () => void }) => {
 
   return (
     <div
-      className={`flex items-center rounded-full p-1 space-x-1 ${containerBg}`}
+      className={`flex items-center rounded-full p-1 space-x-1 outline-none focus-visible:ring-2 focus-visible:ring-tertiary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${containerBg}`}
       onClick={handleContainerToggle}
       role="button"
       tabIndex={0}
@@ -31,10 +31,10 @@ const ThemeSlider = ({ onLightMode }: { onLightMode?: () => void }) => {
       aria-pressed={theme === 'dark'}
     >
       <button
-        className={`h-7 w-7 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out ${
-          theme === 'light' 
-            ? 'bg-background shadow-sm text-foreground' 
-            : 'hover:text-primary text-muted-foreground hover:bg-muted/80'
+        className={`h-7 w-7 rounded-full flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-tertiary transition-all duration-300 ease-in-out ${
+          theme === 'light'
+            ? 'bg-background shadow-sm text-tertiary'
+            : 'hover:text-tertiary text-muted-foreground hover:bg-muted/80'
         }`}
         aria-label="Light mode"
         >
@@ -42,10 +42,10 @@ const ThemeSlider = ({ onLightMode }: { onLightMode?: () => void }) => {
       </button>
       
       <button
-        className={`h-7 w-7 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out ${
-          theme === 'dark' 
-            ? 'bg-background shadow-sm text-foreground' 
-            : 'hover:text-primary text-muted-foreground hover:bg-muted/80'
+        className={`h-7 w-7 rounded-full flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-tertiary transition-all duration-300 ease-in-out ${
+          theme === 'dark'
+            ? 'bg-background shadow-sm text-tertiary'
+            : 'hover:text-tertiary text-muted-foreground hover:bg-muted/80'
         }`}
         aria-label="Dark mode"
       >
