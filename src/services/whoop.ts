@@ -30,27 +30,15 @@ export interface WhoopStrain {
   date: string;
 }
 
-export interface WhoopWorkout {
-  id: string;
-  sport: string;
-  sportId: number;
-  strain: number;
-  duration: number; // minutes
-  avgHr: number;
-  maxHr: number;
-  calories: number;
-  date: string;
-}
-
 export interface WhoopData {
   recovery: (WhoopRecovery | { scoreState: string; score: null }) | null;
   sleep: WhoopSleep | null;
   strain: WhoopStrain | null;
-  workouts: WhoopWorkout[];
   trends: {
     recovery: { date: string; score: number }[];
     strain: { date: string; score: number }[];
     hrv: { date: string; value: number }[];
+    sleep: { date: string; minutes: number }[];
   };
 }
 

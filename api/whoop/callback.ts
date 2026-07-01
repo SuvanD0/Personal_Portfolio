@@ -40,14 +40,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const tokens = await tokenRes.json();
 
-    // Store refresh token in Upstash Redis for self-maintaining rotation
+    // Seed Redis: refresh token + access token + clear any stale lock.
+    // Aligned with api/whoop/data.ts so the dashboard can serve immediately
+    // without doing an extra refresh.
     const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
     const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
     if (redisUrl && redisToken) {
+      const auth = { Authorization: `Bearer ${redisToken}` };
+      const accessTtl = Math.max((tokens.expires_in as number) - 120, 60);
+      const refreshTtl = 60 * 60 * 24 * 60; // 60d
       try {
-        await fetch(`${redisUrl}/set/whoop_refresh_token/${encodeURIComponent(tokens.refresh_token)}`, {
-          headers: { Authorization: `Bearer ${redisToken}` },
-        });
+        await Promise.all([
+          fetch(
+            `${redisUrl}/set/whoop_refresh_token/${encodeURIComponent(tokens.refresh_token)}/EX/${refreshTtl}`,
+            { headers: auth }
+          ),
+          fetch(
+            `${redisUrl}/set/whoop_access_token/${encodeURIComponent(tokens.access_token)}/EX/${accessTtl}`,
+            { headers: auth }
+          ),
+          fetch(`${redisUrl}/del/whoop_refresh_lock`, { headers: auth }),
+        ]);
       } catch {
         // Non-fatal
       }
