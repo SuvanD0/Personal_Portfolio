@@ -8,7 +8,7 @@ export interface SpotifyTrackData {
 }
 
 export async function getNowPlaying(): Promise<SpotifyTrackData> {
-  const response = await fetch('/api/spotify/now-playing');
+  const response = await fetch('/api/lastfm/now-playing');
 
   if (!response.ok) {
     throw new Error('Failed to fetch Spotify data');
