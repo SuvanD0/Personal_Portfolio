@@ -108,6 +108,13 @@ export default {
         "paper-float": "paper-float 3s ease-in-out infinite",
         "smooth-return": "smooth-return 0.5s ease-in-out"
       },
+      // [F1] easing tokens — `ease-out` now means the quint curve everywhere
+      transitionTimingFunction: {
+        out: 'var(--ease-out)',
+        drawer: 'var(--ease-drawer)',
+        morph: 'var(--ease-morph)',
+        pop: 'var(--ease-pop)',
+      },
       transitionDuration: {
         '450': '450ms',
         '500': '500ms',

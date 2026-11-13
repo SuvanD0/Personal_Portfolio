@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -11,7 +11,11 @@ import Resume from "./pages/Resume";
 import Origami from "./pages/Origami";
 import EyesOverlay from './components/custom/EyesOverlay';
 import { useTheme } from './hooks/useTheme';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, lazy, Suspense } from 'react';
+import { cn } from '@/lib/utils';
+
+// Dev-only review overlay; lazy so it never lands in the prod bundle.
+const FeedbackOverlay = import.meta.env.DEV ? lazy(() => import('./dev/FeedbackOverlay')) : null;
 import Header from './components/layout/Header';
 import Whoop from './pages/Whoop';
 import WhoopAuth from './pages/WhoopAuth';
@@ -24,6 +28,8 @@ const EYES_OVERLAY_DURATION = 800;
 
 const AppContent = () => {
   const { theme } = useTheme();
+  const { pathname } = useLocation();
+  const framed = pathname !== '/styleguide'; // styleguide needs its 6xl width
   const [showEyes, setShowEyes] = useState(false);
   const [eyesPosition, setEyesPosition] = useState({ top: 100, left: 100 });
   const timerRef = useRef<number | null>(null);
@@ -68,7 +74,9 @@ const AppContent = () => {
   return (
     <>
       <EyesOverlay show={showEyes} position={eyesPosition} />
-      <div className="min-h-screen flex flex-col">
+      {/* [F9] hatch gutters outside a dashed content column on wide screens */}
+      <div className={cn('min-h-screen flex flex-col', framed && 'hatch-frame')}>
+        <div className={cn('flex-1 flex flex-col w-full', framed && 'hatch-col max-w-3xl mx-auto')} data-fb={framed ? 'F9' : undefined}>
         <Header onLightMode={triggerEyesOverlay} />
         <main className="flex-grow">
           <Routes>
@@ -84,7 +92,13 @@ const AppContent = () => {
           </Routes>
         </main>
         <Footer />
+        </div>
       </div>
+      {FeedbackOverlay && (
+        <Suspense fallback={null}>
+          <FeedbackOverlay />
+        </Suspense>
+      )}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Download } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useTNavigate } from '@/components/common/TLink';
 
 const Resume = () => {
   useEffect(() => {
@@ -14,7 +14,7 @@ const Resume = () => {
     window.open('/Suvan_Dommeti_Resume.pdf', '_blank');
   };
 
-  const navigate = useNavigate();
+  const navigate = useTNavigate(); // [F3]
 
   const handleGoHome = () => {
     navigate('/');

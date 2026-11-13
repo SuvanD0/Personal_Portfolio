@@ -1,5 +1,5 @@
 import { Github, Linkedin, Mail } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import TLink from '../common/TLink';
 import ThemeSlider from '../common/ThemeSlider';
 import IconLink from '../common/IconLink';
 import { personalLinks } from '../../data/portfolioData';
@@ -11,11 +11,12 @@ const iconMap: Record<string, JSX.Element> = {
 };
 
 const Header = ({ onLightMode }: { onLightMode?: () => void }) => {
+  // [F3] vt-header pins the header during route cross-fades
   return (
-    <header className="py-6 flex justify-between items-center w-full max-w-3xl mx-auto px-6">
-      <Link to="/" className="font-heading text-2xl font-semibold tracking-tight hover:opacity-80 transition-opacity">Suvan Dommeti</Link>
+    <header className="vt-header py-6 flex justify-between items-center w-full max-w-3xl mx-auto px-6">
+      <TLink to="/" className="pressable font-heading text-2xl font-semibold tracking-tight hover:opacity-80 transition-opacity">Suvan Dommeti</TLink>
       
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-3" data-fb="F1">
         {personalLinks.map(link => (
           <IconLink
             key={link.title}

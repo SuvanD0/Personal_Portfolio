@@ -15,8 +15,9 @@ function fmtDuration(ms: number): string {
 }
 
 
+// [F6] neutral shimmer sweep instead of pulse
 function Skeleton({ className }: { className?: string }) {
-  return <div className={`animate-pulse rounded bg-border ${className ?? ''}`} />;
+  return <div className={`shimmer-block rounded ${className ?? ''}`} data-fb="F6" />;
 }
 
 // ─── artist flow ──────────────────────────────────────────────────────────────
@@ -122,11 +123,11 @@ function HeatGrid({ dark }: { dark: boolean }) {
   const DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   if (isLoading) {
-    return <div className="animate-pulse h-28 rounded bg-border" />;
+    return <div className="shimmer-block h-28 rounded" data-fb="F6" />;
   }
 
   return (
-    <div className="relative select-none">
+    <div className="relative select-none" data-fb="F7">
       <div ref={scrollRef} className="overflow-x-auto pb-1">
       {/* Month labels */}
       <div className="flex mb-1 ml-7 text-[9px] text-muted-foreground">
@@ -178,7 +179,8 @@ function HeatGrid({ dark }: { dark: boolean }) {
       {/* Tooltip */}
       {tooltip && (
         <div
-          className="fixed z-50 pointer-events-none bg-card border border-border rounded px-2 py-1 text-xs shadow-md"
+          key={tooltip.date}
+          className="popup-in fixed z-50 pointer-events-none bg-card border border-border rounded px-2 py-1 text-xs shadow-md"
           style={{ left: tooltip.x + 18, top: tooltip.y - 8 }}
         >
           <span className="text-muted-foreground">

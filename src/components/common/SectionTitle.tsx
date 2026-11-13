@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
+import NudgeArrow from './NudgeArrow';
 
 interface SectionTitleProps {
   title: string;
@@ -14,9 +15,10 @@ const SectionTitle = ({ title, className, resumeLink }: SectionTitleProps) => {
         {title}
       </h2>
       {resumeLink && (
-        <a href={resumeLink} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm" className="border border-dashed border-foreground/40 hover:border-primary hover:text-primary transition-colors duration-100 text-xs">
-            Resume
+        <a href={resumeLink} target="_blank" rel="noopener noreferrer" className="group pressable inline-block" data-fb="F5">
+          {/* [F5] arrow nudges up-right on hover */}
+          <Button variant="outline" size="sm" className="gap-1 border border-dashed border-foreground/40 hover:border-primary hover:text-primary transition-colors duration-150 ease-out text-xs">
+            Resume <NudgeArrow className="h-3 w-3" />
           </Button>
         </a>
       )}
