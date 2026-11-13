@@ -121,7 +121,9 @@ function whoop() {
 // ── plugin ────────────────────────────────────────────────────────────────────
 const ROUTES: Record<string, () => unknown> = {
   '/api/spotify/now-playing': () => nowPlaying,
+  '/api/lastfm/now-playing': () => nowPlaying,
   '/api/spotify/stats': musicStats,
+  '/api/lastfm/stats': musicStats,
   '/api/lastfm/heatmap': heatmap,
   '/api/whoop/data': whoop,
 };

@@ -30,7 +30,7 @@ export interface SpotifyStatsData {
 }
 
 export async function getSpotifyStats(): Promise<SpotifyStatsData> {
-  const res = await fetch('/api/spotify/stats');
+  const res = await fetch('/api/lastfm/stats');
   if (!res.ok) throw new Error('Failed to fetch stats');
   return res.json();
 }

@@ -52,5 +52,5 @@ export const CHANGES: ChangeEntry[] = [
   { id: 'M4', title: 'Track rows: stagger, cover lift, play bar', where: '/stats · Top Tracks' },
   { id: 'M5', title: 'Now playing row', where: '/stats · top',
     note: 'Cover, title, artist, 3-bar equalizer when playing.' },
-  { id: 'M6', title: 'Copy: "All time" not "Last 4 weeks"', where: '/stats · subtitles' },
+  { id: 'M6', title: 'Copy: "Last 4 weeks"', where: '/stats · subtitles', note: 'Upstream now queries period=1month, so the label is correct again.' },
 ];

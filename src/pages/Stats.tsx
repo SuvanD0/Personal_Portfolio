@@ -374,7 +374,7 @@ export default function Stats() {
         {/* [M3] top artists — typographic flow */}
         <section>
           <SectionTitle title="Top Artists" />
-          <p className="text-xs text-muted-foreground mb-5" data-fb="M6">All time</p>
+          <p className="text-xs text-muted-foreground mb-5" data-fb="M6">Last 4 weeks</p>
           {isLoading ? (
             <div className="space-y-3">
               <Skeleton className="h-8 w-full" />
@@ -391,7 +391,7 @@ export default function Stats() {
         {/* [M4] top tracks */}
         <section>
           <SectionTitle title="Top Tracks" />
-          <p className="text-xs text-muted-foreground mb-4">All time</p>
+          <p className="text-xs text-muted-foreground mb-4">Last 4 weeks</p>
           {isLoading ? (
             <div className="space-y-3">
               {[0, 1, 2, 3, 4].map(i => (

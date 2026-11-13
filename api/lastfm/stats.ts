@@ -4,14 +4,20 @@ const API_KEY = process.env.LASTFM_API_KEY;
 const USER = process.env.LASTFM_USERNAME;
 const BASE = 'https://ws.audioscrobbler.com/2.0/';
 
-function lfm(method: string, params: Record<string, string> = {}) {
+async function lfm(method: string, params: Record<string, string> = {}) {
   const u = new URL(BASE);
   u.searchParams.set('method', method);
   u.searchParams.set('user', USER || '');
   u.searchParams.set('api_key', API_KEY || '');
   u.searchParams.set('format', 'json');
   for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v);
-  return fetch(u.toString());
+  const res = await fetch(u.toString());
+  const data = await res.json().catch(() => ({}));
+  // Last.fm reports errors in the body, sometimes with a 200 status.
+  if (!res.ok || data.error) {
+    throw new Error(`Last.fm ${method} failed: ${data.message ?? res.status}`);
+  }
+  return data;
 }
 
 function pickImage(images: any[], size = 'large'): string | null {
@@ -27,14 +33,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
-    const [artistsRes, tracksRes] = await Promise.all([
-      lfm('user.getTopArtists', { period: 'overall', limit: '20' }),
-      lfm('user.getTopTracks', { period: 'overall', limit: '10' }),
-    ]);
-
-    const [artistsData, tracksData] = await Promise.all([
-      artistsRes.ok ? artistsRes.json() : {},
-      tracksRes.ok ? tracksRes.json() : {},
+    // "1month" matches the "Last 4 weeks" label on the stats page.
+    const [artistsData, tracksData, recentData] = await Promise.all([
+      lfm('user.getTopArtists', { period: '1month', limit: '20' }),
+      lfm('user.getTopTracks', { period: '1month', limit: '10' }),
+      lfm('user.getRecentTracks', { limit: '10' }),
     ]);
 
     const topArtists = (artistsData.topartists?.artist ?? []).map((a: any) => ({
@@ -55,7 +58,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       playcount: parseInt(t.playcount || '0'),
     }));
 
-    return res.status(200).json({ topArtists, topTracks, recentlyPlayed: [] });
+    const recentlyPlayed = (recentData.recenttracks?.track ?? []).map((t: any) => ({
+      name: t.name,
+      artist: t.artist?.['#text'] ?? '',
+      playedAt: t.date?.uts
+        ? new Date(parseInt(t.date.uts) * 1000).toISOString()
+        : new Date().toISOString(), // now playing has no date
+      url: t.url,
+    }));
+
+    return res.status(200).json({ topArtists, topTracks, recentlyPlayed });
   } catch (error) {
     console.error('Last.fm stats error:', error);
     return res.status(500).json({ error: 'Failed to fetch Last.fm stats' });
