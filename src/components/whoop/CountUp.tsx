@@ -36,7 +36,7 @@ export default function CountUp({
     const anim = animate(proxy, {
       n: target,
       duration,
-      ease: 'outExpo',
+      ease: 'cubicBezier(0.23, 1, 0.32, 1)', // [H4] quint, matches --ease-out
       onUpdate: () => {
         el.textContent = fmt(proxy.n) + (suffix ?? '');
       },

@@ -207,6 +207,35 @@
     animation: popup-in 0.16s var(--ease-pop) both;
   }
 
+  /* [M2] heatmap cell lift */
+  .heat-cell {
+    position: relative;
+    transition: scale 0.15s var(--ease-out);
+  }
+  .heat-cell:hover {
+    scale: 1.4;
+    z-index: 1;
+  }
+
+  /* [M5] now-playing equalizer */
+  .eq {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+  }
+  .eq > i {
+    display: block;
+    width: 3px;
+    height: 30%;
+    border-radius: 1px;
+    background: hsl(var(--sage-moss));
+    animation: eq-bounce 0.9s var(--ease-in-out, ease-in-out) infinite;
+  }
+  .eq > i:nth-child(2) { animation-delay: -0.3s; }
+  .eq > i:nth-child(3) { animation-delay: -0.6s; }
+  .eq.paused > i { animation: none; height: 30%; opacity: 0.5; }
+
   /* [F9] hatch gutters + dashed frame on wide screens */
   .hatch-frame {
     background-color: hsl(var(--background));
@@ -221,6 +250,10 @@
   }
 }
 
+@keyframes eq-bounce {
+  0%, 100% { height: 30%; }
+  50% { height: 100%; }
+}
 @keyframes row-in {
   0% { opacity: 0; translate: 0 -10px; }
 }
@@ -256,10 +289,11 @@
 
 /* [F10] reduced motion: every borrowed animation collapses to instant/fade */
 @media (prefers-reduced-motion: reduce) {
-  .row-in, .popup-in, .text-shimmer, .shimmer-block {
+  .row-in, .popup-in, .text-shimmer, .shimmer-block, .eq > i {
     animation: none !important;
   }
   .text-shimmer { color: hsl(var(--muted-foreground)); background: none; }
   .pressable:active { scale: 1; }
+  .heat-cell:hover { scale: 1; }
   ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }

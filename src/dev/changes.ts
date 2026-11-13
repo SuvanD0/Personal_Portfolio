@@ -26,4 +26,31 @@ export const CHANGES: ChangeEntry[] = [
     note: 'Round 2: dashed borders removed, solid column widened 3xl→4xl.' },
   { id: 'F10', title: 'Reduced-motion fallbacks', where: 'global',
     note: 'All of the above collapse to instant/fade under prefers-reduced-motion.' },
+
+  // ── /whoop ──
+  { id: 'H1', title: 'Sparkline hover scrub', where: '/whoop · recovery, strain, sleep lines',
+    note: 'Dot follows cursor, dashed hairline, date + value tooltip.' },
+  { id: 'H2', title: 'Recovery zone bands', where: '/whoop · recovery sparkline',
+    note: 'Low / Moderate / Optimal at 34 / 67 in ramp colours, 7% opacity.' },
+  { id: 'H3', title: 'Strain line under recovery', where: '/whoop · Fitness',
+    note: 'Neutral stroke, 0–21 scale, 30 days. Sage stays on recovery.' },
+  { id: 'H4', title: 'Hero count-up + late unit/zone', where: '/whoop · 66%',
+    note: 'Quint curve; "%" and zone label land after the number.' },
+  { id: 'H5', title: 'Segmented sleep bar', where: '/whoop · Sleep',
+    note: 'Segments lift on hover with tooltip; labels under their own segment.' },
+  { id: 'H6', title: '"as of" timestamps', where: '/whoop · section headers' },
+  { id: 'H7', title: 'Insight callout', where: '/whoop · italic lines',
+    note: 'Dashed left rule + sage dot.' },
+
+  // ── /stats ──
+  { id: 'M1', title: 'Heatmap first + stat row', where: '/stats · top',
+    note: 'Tracks this year · best day · current streak, counted up + staggered.' },
+  { id: 'M2', title: 'Heatmap cell lift', where: '/stats · heat grid',
+    note: 'Cell scales 1.4 on hover, quint curve.' },
+  { id: 'M3', title: 'Artist flow restyled', where: '/stats · Top Artists',
+    note: 'Rank-scaled sizes, only #1 in sage, play counts as superscript.' },
+  { id: 'M4', title: 'Track rows: stagger, cover lift, play bar', where: '/stats · Top Tracks' },
+  { id: 'M5', title: 'Now playing row', where: '/stats · top',
+    note: 'Cover, title, artist, 3-bar equalizer when playing.' },
+  { id: 'M6', title: 'Copy: "All time" not "Last 4 weeks"', where: '/stats · subtitles' },
 ];
