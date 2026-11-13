@@ -1,65 +1,99 @@
-import DotGrid from '../components/custom/DotGrid';
-import NotFoundImg from '../assets/404NotFound.png';
-import { useTheme } from '../hooks/useTheme';
-import { useEffect, useState } from 'react';
+import { CSSProperties } from 'react';
+import TLink from '@/components/common/TLink';
+import NudgeArrow from '@/components/common/NudgeArrow';
 
-const getForegroundColor = () => {
-  if (typeof window === 'undefined') return '#222';
-  const root = document.documentElement;
-  const style = getComputedStyle(root);
-  const fg = style.getPropertyValue('--foreground');
-  // Convert HSL to CSS string if needed
-  return fg.includes('%') ? `hsl(${fg})` : fg || '#222';
-};
+// One paper crane, side-on: beak left, neck up-left, tall wing, tail up-right, flat body.
+const CRANE = String.raw`
+                    ##
+                   ####
+ <                 ####
+  \               ######               /
+   \             ########             /
+    \           ##########           /
+     \          ##########          /
+      \        ############        /
+       \      ##############      /
+        \    ################    /
+        ==========================
+         ========================
+          ======================
+           ====================
+`;
+
+// A distant flock: small glyph-cranes drifting across at different depths.
+const FLOCK: { top: string; dur: number; delay: number; size: number; op: number; glyph: string }[] = [
+  { top: '12%', dur: 38, delay: -4,  size: 11, op: 0.55, glyph: '~v~' },
+  { top: '18%', dur: 46, delay: -20, size: 9,  op: 0.35, glyph: '\\v/' },
+  { top: '26%', dur: 52, delay: -31, size: 8,  op: 0.25, glyph: '~v~' },
+  { top: '70%', dur: 44, delay: -12, size: 10, op: 0.4,  glyph: '\\v/' },
+  { top: '78%', dur: 58, delay: -40, size: 8,  op: 0.25, glyph: '~v~' },
+  { top: '86%', dur: 40, delay: -8,  size: 12, op: 0.5,  glyph: '\\v/' },
+];
 
 const NotFound = () => {
-  const { theme } = useTheme();
-  const [foreground, setForeground] = useState('#222');
-
-  useEffect(() => {
-    setForeground(getForegroundColor());
-  }, [theme]);
-
   return (
-    <div className="fixed inset-0 w-full h-full bg-background text-foreground overflow-hidden flex items-center justify-center">
-      {/* DotGrid fills the background */}
-      <div className="absolute inset-0 z-0">
-        <DotGrid
-          dotSize={12}
-          gap={28}
-          baseColor={foreground}
-          activeColor={foreground}
-          proximity={120}
-          speedTrigger={100}
-          shockRadius={200}
-          shockStrength={5}
-          maxSpeed={5000}
-          resistance={750}
-          returnDuration={1.5}
-        />
+    <div className="relative min-h-[calc(100vh-200px)] overflow-hidden flex items-center justify-center text-foreground">
+      {/* flock */}
+      <div className="absolute inset-0 pointer-events-none select-none" aria-hidden>
+        {FLOCK.map((b, i) => (
+          <span
+            key={i}
+            className="crane-drift absolute left-0 text-sage-moss whitespace-pre"
+            style={{
+              top: b.top,
+              fontSize: b.size,
+              opacity: b.op,
+              animationDuration: `${b.dur}s`,
+              animationDelay: `${b.delay}s`,
+              fontFamily: 'Menlo, Consolas, monospace',
+              fontFeatureSettings: 'normal',
+            } as CSSProperties}
+          >
+            {b.glyph}
+          </span>
+        ))}
       </div>
-      {/* 404 image centered and masked out from the grid */}
-      <div
-        className="relative z-10 flex items-center justify-center"
-        style={{
-          width: 'min(80vw, 600px)',
-          height: 'auto',
-          pointerEvents: 'none',
-          userSelect: 'none',
-        }}
-      >
-        <img
-          src={NotFoundImg}
-          alt="404 Not Found"
+
+      <main className="relative max-w-3xl mx-auto px-6 py-10 flex flex-col items-center text-center">
+        <pre
+          aria-hidden
+          className="crane-float text-left text-sage-moss leading-[1.05] select-none mb-8"
           style={{
-            width: '100%',
-            height: 'auto',
-            display: 'block',
-            filter: theme === 'light' ? 'brightness(0.2) saturate(0)' : 'none',
-            opacity: 0.95,
+            fontSize: 'clamp(8px, 1.5vw, 12px)',
+            // body sets "calt"; contextual alternates break the character grid
+            fontFamily: 'Menlo, Consolas, "Liberation Mono", "Courier New", monospace',
+            fontFeatureSettings: 'normal',
+            fontVariantLigatures: 'none',
           }}
-        />
-      </div>
+        >
+          {CRANE.replace(/^\n/, '')}
+        </pre>
+
+        <p className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-3 row-in" style={{ '--row': 2 } as CSSProperties}>
+          404
+        </p>
+        <h1 className="font-heading text-3xl md:text-4xl font-semibold tracking-tight mb-3 row-in" style={{ '--row': 4 } as CSSProperties}>
+          This page folded itself away.
+        </h1>
+        <p className="text-muted-foreground leading-relaxed max-w-md mb-8 row-in" style={{ '--row': 6 } as CSSProperties}>
+          Whatever you were looking for isn't here anymore. The cranes don't seem to mind.
+        </p>
+
+        <div className="flex flex-wrap items-center justify-center gap-3 row-in" style={{ '--row': 8 } as CSSProperties}>
+          <TLink
+            to="/"
+            className="group pressable inline-flex items-center gap-1.5 rounded-lg border border-dashed border-foreground/40 px-4 py-2 text-sm font-medium hover:border-primary hover:text-primary transition-colors duration-150 ease-out"
+          >
+            Back home <NudgeArrow className="h-3 w-3 rotate-[225deg] group-hover:-translate-x-0.5 group-hover:translate-y-0.5 group-hover:translate-x-0 group-hover:-translate-y-0" />
+          </TLink>
+          <TLink
+            to="/origami"
+            className="group pressable inline-flex items-center gap-1 px-2 py-2 text-sm font-medium text-sage-moss hover:opacity-80 transition-opacity"
+          >
+            See the origami <NudgeArrow className="h-3 w-3" />
+          </TLink>
+        </div>
+      </main>
     </div>
   );
 };
