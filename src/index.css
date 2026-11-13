@@ -30,6 +30,14 @@
     --input: 0 0% 93%;
     --ring: 0 0% 13%;
     --radius: 0.5rem;
+
+    /* [F1] Motion tokens (borrowed from designeer.xyz) */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);      /* quint — default for micro-interactions */
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);   /* expand/collapse, sheets */
+    --ease-morph: cubic-bezier(0.33, 0.55, 0.2, 1);  /* side sheet enter */
+    --ease-pop: cubic-bezier(0.16, 1, 0.3, 1);       /* popovers/tooltips */
+    /* [F9] hatch gutter tile */
+    --hatch-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M-1 1l2-2M0 6l6-6M5 7l2-2' stroke='black' stroke-opacity='0.07'/%3E%3C/svg%3E");
   }
 
   .dark {
@@ -57,6 +65,7 @@
     --border: 0 0% 25%;
     --input: 0 0% 25%;
     --ring: 0 0% 93%;
+    --hatch-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M-1 1l2-2M0 6l6-6M5 7l2-2' stroke='white' stroke-opacity='0.06'/%3E%3C/svg%3E");
   }
 
   /* Design system typography: Source Sans 3 body, Playfair Display headings */
@@ -106,17 +115,17 @@
 
 @layer components {
   .toggle-card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s var(--ease-drawer);
   }
 
   .toggle-content {
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: max-height 0.3s var(--ease-drawer),
+                opacity 0.3s var(--ease-drawer);
   }
 
   .paper-shadow {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    transition: box-shadow 0.4s cubic-bezier(.25,.8,.25,1);
+    transition: box-shadow 0.2s var(--ease-out);
   }
 
   .paper-shadow:hover {
@@ -134,13 +143,13 @@
   /* Updated hover animations */
   .hover-transition {
     transition-property: all;
-    transition-duration: 0.4s;
-    transition-timing-function: ease-in-out;
+    transition-duration: 0.2s;
+    transition-timing-function: var(--ease-out);
   }
 
   .hover-float {
     transform: translateY(0);
-    transition: transform 0.4s ease-in-out;
+    transition: transform 0.25s var(--ease-out);
   }
 
   .hover-float:hover {
@@ -150,4 +159,141 @@
   .heading {
     @apply text-foreground font-semibold tracking-tight;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Motion system borrowed from designeer.xyz (dev/designeer-motion branch)
+   [F1]–[F10] tags match the dev feedback overlay.
+   ───────────────────────────────────────────────────────────────────────── */
+@layer components {
+  /* [F1] press feedback: anything clickable squashes slightly on :active */
+  .pressable {
+    --press: 0.97;
+    transition: scale 0.15s var(--ease-out);
+  }
+  .pressable:active {
+    scale: var(--press);
+  }
+
+  /* [F2] staggered row reveal — set style={{ '--row': i }} on each item */
+  .row-in {
+    animation: row-in 0.32s var(--ease-out) both;
+    animation-delay: calc(90ms + min(var(--row, 0), 24) * 28ms);
+  }
+
+  /* [F6] loading shimmer (neutral sweep, no chromatic gradient) */
+  .text-shimmer {
+    background: linear-gradient(100deg,
+      hsl(var(--muted-foreground)) 35%,
+      hsl(var(--foreground)) 50%,
+      hsl(var(--muted-foreground)) 65%);
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer-sweep 1.8s linear infinite;
+  }
+  .shimmer-block {
+    background: linear-gradient(100deg,
+      hsl(var(--foreground) / 0.06) 35%,
+      hsl(var(--foreground) / 0.12) 50%,
+      hsl(var(--foreground) / 0.06) 65%);
+    background-size: 250% 100%;
+    animation: shimmer-sweep 1.8s linear infinite;
+  }
+
+  /* [F7] popover / tooltip enter */
+  .popup-in {
+    animation: popup-in 0.16s var(--ease-pop) both;
+  }
+
+  /* [M2] heatmap cell lift */
+  .heat-cell {
+    position: relative;
+    transition: scale 0.15s var(--ease-out);
+  }
+  .heat-cell:hover {
+    scale: 1.4;
+    z-index: 1;
+  }
+
+  /* [M5] now-playing equalizer */
+  .eq {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+  }
+  .eq > i {
+    display: block;
+    width: 3px;
+    height: 30%;
+    border-radius: 1px;
+    background: hsl(var(--sage-moss));
+    animation: eq-bounce 0.9s var(--ease-in-out, ease-in-out) infinite;
+  }
+  .eq > i:nth-child(2) { animation-delay: -0.3s; }
+  .eq > i:nth-child(3) { animation-delay: -0.6s; }
+  .eq.paused > i { animation: none; height: 30%; opacity: 0.5; }
+
+  /* [F9] hatch gutters + dashed frame on wide screens */
+  .hatch-frame {
+    background-color: hsl(var(--background));
+  }
+  @media (min-width: 1024px) {
+    .hatch-frame {
+      background-image: var(--hatch-tile);
+    }
+    .hatch-col {
+      background-color: hsl(var(--background));
+    }
+  }
+}
+
+@keyframes eq-bounce {
+  0%, 100% { height: 30%; }
+  50% { height: 100%; }
+}
+@keyframes row-in {
+  0% { opacity: 0; translate: 0 -10px; }
+}
+@keyframes shimmer-sweep {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+@keyframes popup-in {
+  0% { opacity: 0; transform: scale(0.94) translateY(6px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes fade-in {
+  0% { opacity: 0; }
+}
+@keyframes fade-out {
+  100% { opacity: 0; }
+}
+@keyframes route-leave {
+  100% { opacity: 0; }
+}
+@keyframes route-enter {
+  0% { opacity: 0; }
+}
+
+/* [F3] route fades via the View Transitions API; header stays pinned */
+::view-transition { pointer-events: none; }
+::view-transition-old(root) { animation: route-leave 0.1s var(--ease-out) both; }
+::view-transition-new(root) { animation: route-enter 0.16s var(--ease-out) both; }
+.vt-header { view-transition-name: page-header; }
+::view-transition-group(page-header) { animation: none; }
+::view-transition-old(page-header) { display: none; }
+::view-transition-new(page-header) { animation: none; }
+
+/* [F10] reduced motion: every borrowed animation collapses to instant/fade */
+@media (prefers-reduced-motion: reduce) {
+  .row-in, .popup-in, .text-shimmer, .shimmer-block, .eq > i {
+    animation: none !important;
+  }
+  .text-shimmer { color: hsl(var(--muted-foreground)); background: none; }
+  .pressable:active { scale: 1; }
+  .heat-cell:hover { scale: 1; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }

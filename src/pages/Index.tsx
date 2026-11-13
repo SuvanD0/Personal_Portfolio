@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+import { CSSProperties } from 'react';
+import TLink from '@/components/common/TLink';
+import NudgeArrow from '@/components/common/NudgeArrow';
 import RoleCard from '../components/custom/RoleCard';
 import SectionTitle from '../components/common/SectionTitle';
 import { workExperiences, projects, albums } from '@/data/portfolioData';
@@ -6,9 +8,13 @@ import TiltedCard from '../components/custom/TiltedCard';
 import { useSpotify } from '@/hooks/useSpotify';
 
 const Index = () => {
-  const { data: spotifyData } = useSpotify();
+  const { data: spotifyData, isLoading: spotifyLoading } = useSpotify();
 
   const getSpotifyText = () => {
+    // [F6] shimmer while the first fetch is in flight
+    if (spotifyLoading) {
+      return <span className="text-shimmer" data-fb="F6">Checking what's playing…</span>;
+    }
     if (!spotifyData || !spotifyData.title) {
       return "Not currently listening to anything";
     }
@@ -21,9 +27,9 @@ const Index = () => {
             href={spotifyData.songUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sage-moss hover:opacity-80 transition-opacity font-medium"
+            className="group inline-flex items-center gap-0.5 text-sage-moss hover:opacity-80 transition-opacity font-medium"
           >
-            {spotifyData.title}
+            {spotifyData.title}<NudgeArrow className="h-3 w-3" />
           </a>
           {' '}by {spotifyData.artist}
         </>
@@ -66,7 +72,7 @@ const Index = () => {
               Right now, I'm learning everything I can from the people building the next generation of products, from internal developer platforms to AI tooling.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
-              I'm originally from the Midwest. Somewhere along the way I started tracking parts of my life, and it stuck. Some of it is about optimizing what I care about most, like my <Link to="/whoop" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">health and fitness</Link>. Some of it is just making sure I'm still doing the things I love, like <Link to="/origami" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">origami</Link> and <Link to="/stats" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">music</Link>. The data isn't the point. It's a way to stay honest with myself about how I'm actually spending my time.
+              I'm originally from the Midwest. Somewhere along the way I started tracking parts of my life, and it stuck. Some of it is about optimizing what I care about most, like my <TLink to="/whoop" data-fb="F3" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">health and fitness</TLink>. Some of it is just making sure I'm still doing the things I love, like <TLink to="/origami" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">origami</TLink> and <TLink to="/stats" className="font-semibold text-sage-moss hover:opacity-80 transition-opacity">music</TLink>.
             </p>
             <p className="mt-4 text-muted-foreground leading-relaxed">
               {getSpotifyText()}
@@ -81,10 +87,14 @@ const Index = () => {
             resumeLink="/Suvan_Dommeti_Resume.pdf" 
           />
           
-          <div className="space-y-2">
+          {/* [F2] staggered reveal; [F4] expand mechanics live in RoleCard */}
+          <div className="space-y-2" data-fb="F2">
             {workExperiences.map((experience, index) => (
               <RoleCard 
                 key={`${experience.company ?? 'work'}-${experience.role ?? index}-${experience.period ?? index}`}
+                className="row-in"
+                style={{ '--row': index } as CSSProperties}
+                data-fb={index === 0 ? 'F4' : undefined}
                 logo={experience.logo}
                 company={experience.company}
                 role={experience.role}
@@ -101,10 +111,13 @@ const Index = () => {
         <section>
           <SectionTitle title="Projects" />
           
-          <div className="space-y-2">
+          {/* [F8] reverted: same expand as Work Experience */}
+          <div className="space-y-2" data-fb="F8">
             {projects.map((project, index) => (
               <RoleCard 
                 key={`${project.title ?? 'project'}-${project.year ?? index}`}
+                className="row-in"
+                style={{ '--row': index } as CSSProperties}
                 logo={project.logo}
                 title={project.title}
                 description={project.description}
@@ -127,8 +140,8 @@ const Index = () => {
                 href={album.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block"
-                style={{ textDecoration: 'none' }}
+                className="block row-in pressable"
+                style={{ textDecoration: 'none', '--row': index } as CSSProperties}
               >
                 <TiltedCard
                   imageSrc={album.coverUrl}

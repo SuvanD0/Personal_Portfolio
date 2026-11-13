@@ -4,11 +4,12 @@ import AmazonLogo from '@/assets/logos/companies/Amazon.jpg';
 import JPMorganLogo from '@/assets/logos/companies/JPMorgan.png';
 import BlueBonnetLogo from '@/assets/logos/companies/BlueBonnetData.jpg';
 import NorthwestLogo from '@/assets/logos/companies/NorthwestBank.png';
-import WillowTreeLogo from '@/assets/logos/companies/WillowTree.jpg';
+import WillowTreeLogo from '@/assets/logos/companies/WillowTree.png';
 import LovableLogo from '@/assets/logos/companies/Lovable.png';
 import GroupMeLogo from '@/assets/logos/projects/GroupMe.jpg';
 import WikimediaLogo from '@/assets/logos/projects/Wikimedia.png';
 import YaleLawSchoolLogo from '@/assets/logos/projects/YaleLawSchool.png';
+import ShutTheSashLogo from '@/assets/logos/projects/ShutTheSash.svg';
 
 export interface RoleCardData {
   logo?: React.ReactNode;
@@ -76,10 +77,19 @@ const createProjectLogo = (src: string, alt: string) => {
 
 export const workExperiences: RoleCardData[] = [
   {
+    logo: createLogo(AmazonLogo, "Amazon Logo"),
+    company: "Amazon Web Services (AWS)",
+    role: "Software Development Engineer",
+    period: "Sep 2026 – Present",
+    location: "Seattle, WA",
+    description: "Working on AWS traffic engineering.",
+    tags: ["AWS", "Networking", "Distributed Systems"]
+  },
+  {
     logo: createLogo(LovableLogo, "Lovable Logo"),
     company: "Lovable",
     role: "Growth Intern",
-    period: "Jan 2026 – Present",
+    period: "Jan 2026 – Sep 2026",
     location: "Remote",
     description: "Leading hackathon partnerships with colleges and startups to demonstrate Lovable's AI-powered application development tools.",
     tags: ["Growth", "Partnerships", "AI Tools", "Hackathons", "Developer Relations"]
@@ -101,15 +111,6 @@ export const workExperiences: RoleCardData[] = [
     location: "Columbus, OH",
     description: "Migrated React app to Next.js with TypeScript, improving Core Web Vitals by 50%, adding WCAG 2.1 accessibility for 10,000+ users. Built 7 reusable TypeScript/React components with full keyboard navigation and ARIA support, deployed across 2 production apps. Improved data pipeline latency by 40% merging 7 data ingestion APIs into 3 endpoints, added Splunk logs to monitor performance. Achieved full test coverage deploying applications to AWS via Cloud Foundry and Jenkins, monitored by Jest and JUnit.",
     tags: ["TypeScript/JavaScript", "Next.js", "React", "Splunk", "AWS", "Jenkins", "Cloud Foundry", "WCAG 2.1", "ARIA"]
-  },
-  {
-    logo: createLogo(YaleLawSchoolLogo, "Yale Law School Logo"),
-    company: "Yale Law School Eviction Lab",
-    role: "Research Assistant",
-    period: "May 2024 – Present",
-    location: "New Haven, CT",
-    description: "Developing an open-source Python library to predict demographic shifts and gentrification patterns, now used by ~500 researchers. Created ML models with 92% accuracy in predicting neighborhood gentrification, leveraging TensorFlow and historical datasets. Engineered a data scraper to automate housing data collection, transforming 1M+ listings into structured datasets for model training.",
-    tags: ["Python", "Machine Learning", "TensorFlow", "Data Science", "Open Source", "Research"]
   },
   {
     logo: createLogo(NorthwestLogo, "Northwest Bank Logo"),
@@ -137,7 +138,7 @@ const createIcon = (Icon: any) => {
 
 export const projects: RoleCardData[] = [
   {
-    logo: createIcon(Globe),
+    logo: createProjectLogo(ShutTheSashLogo, "Shut The Sash Logo"),
     title: "Shut The Sash",
     description: "OSU Smart Campus Challenge — Fume Hood Energy Compliance Dashboard",
     year: "Jan 2026 – Present",
@@ -151,6 +152,14 @@ export const projects: RoleCardData[] = [
     year: "Aug 2024 – Present",
     details: "Built an ML model to classify AI vs human generated content, improving content attribution accuracy by 23% across 100,000+ articles. Discovered a 30% higher community engagement on articles with a balanced bot-human edit ratio by analyzing 1M+ bot edits.",
     tags: ["Machine Learning", "Content Analysis", "Data Science", "Python", "Big Data", "Community Engagement"]
+  },
+  {
+    logo: createProjectLogo(YaleLawSchoolLogo, "Yale Law School Logo"),
+    title: "Yale Law School Eviction Lab",
+    description: "Gentrification Prediction & Housing Data Research",
+    year: "May 2024 – Present",
+    details: "Developing an open-source Python library to predict demographic shifts and gentrification patterns, now used by ~500 researchers. Created ML models with 92% accuracy in predicting neighborhood gentrification, leveraging TensorFlow and historical datasets. Engineered a data scraper to automate housing data collection, transforming 1M+ listings into structured datasets for model training.",
+    tags: ["Python", "Machine Learning", "TensorFlow", "Data Science", "Open Source", "Research"]
   },
   {
     logo: createProjectLogo(GroupMeLogo, "GroupMe Logo"),
