@@ -22,8 +22,6 @@ export const CHANGES: ChangeEntry[] = [
   { id: 'F7', title: 'Tooltip pop-in', where: '/stats heatmap tooltip' },
   { id: 'F8', title: 'Projects expand (sheet reverted)', where: 'Projects',
     note: 'Round 2: sheet removed, same grid expand as Work Experience.' },
-  { id: 'F9', title: 'Hatch gutters', where: 'outside content column, ≥1024px',
-    note: 'Round 2: dashed borders removed, solid column widened 3xl→4xl.' },
   { id: 'F10', title: 'Reduced-motion fallbacks', where: 'global',
     note: 'All of the above collapse to instant/fade under prefers-reduced-motion.' },
 
