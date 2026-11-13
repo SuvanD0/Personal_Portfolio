@@ -74,9 +74,9 @@ const AppContent = () => {
   return (
     <>
       <EyesOverlay show={showEyes} position={eyesPosition} />
-      {/* [F9] hatch gutters outside a dashed content column on wide screens */}
+      {/* [F9] hatch gutters outside a solid 4xl column on wide screens */}
       <div className={cn('min-h-screen flex flex-col', framed && 'hatch-frame')}>
-        <div className={cn('flex-1 flex flex-col w-full', framed && 'hatch-col max-w-3xl mx-auto')} data-fb={framed ? 'F9' : undefined}>
+        <div className={cn('flex-1 flex flex-col w-full', framed && 'hatch-col max-w-4xl mx-auto')} data-fb={framed ? 'F9' : undefined}>
         <Header onLightMode={triggerEyesOverlay} />
         <main className="flex-grow">
           <Routes>

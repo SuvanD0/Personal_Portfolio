@@ -14,8 +14,6 @@ interface RoleCardProps {
   description?: string;
   details?: string; // For projects
   tags?: string[];
-  /** [F8] when set, clicking opens a detail sheet instead of expanding inline */
-  onSelect?: () => void;
   className?: string;
   style?: CSSProperties;
   'data-fb'?: string;
@@ -32,13 +30,11 @@ const RoleCard = ({
   description,
   details,
   tags,
-  onSelect,
   className,
   style,
   'data-fb': dataFb,
 }: RoleCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const sheetMode = Boolean(onSelect);
 
   const headerContent = (
     <div className="flex items-center space-x-4">
@@ -67,10 +63,10 @@ const RoleCard = ({
       {/* [F1] pressable: squashes to 98.5% on :active. [F4] chevron uses the drawer curve. */}
       <button
         type="button"
-        aria-expanded={sheetMode ? undefined : isOpen}
+        aria-expanded={isOpen}
         className="group pressable w-full text-left p-4 flex justify-between items-center cursor-pointer hover:bg-muted/20 transition-colors duration-150 ease-out rounded-xl"
         style={{ '--press': 0.985 } as CSSProperties}
-        onClick={() => (sheetMode ? onSelect?.() : setIsOpen(!isOpen))}
+        onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center space-x-3">{headerContent}</div>
         <div className="flex items-center space-x-3">
@@ -80,9 +76,7 @@ const RoleCard = ({
             <ChevronRight
               className={cn(
                 'w-4 h-4 text-muted-foreground transition-transform duration-300 ease-drawer',
-                sheetMode
-                  ? 'group-hover:translate-x-0.5'
-                  : isOpen ? 'rotate-90' : 'rotate-0 group-hover:translate-x-0.5'
+                isOpen ? 'rotate-90' : 'rotate-0 group-hover:translate-x-0.5'
               )}
             />
           </div>
@@ -90,7 +84,7 @@ const RoleCard = ({
       </button>
 
       {/* [F4] grid-rows 0fr→1fr expand (no max-height guess), content slides down 6px */}
-      {!sheetMode && hasBody ? (
+      {hasBody ? (
         <div
           className="grid transition-[grid-template-rows] duration-300 ease-drawer"
           style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}

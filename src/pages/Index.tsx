@@ -1,19 +1,14 @@
-import { useState, useCallback, CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 import TLink from '@/components/common/TLink';
 import NudgeArrow from '@/components/common/NudgeArrow';
-import ProjectSheet from '../components/custom/ProjectSheet';
-import { cn } from '@/lib/utils';
 import RoleCard from '../components/custom/RoleCard';
 import SectionTitle from '../components/common/SectionTitle';
-import { workExperiences, projects, albums, RoleCardData } from '@/data/portfolioData';
+import { workExperiences, projects, albums } from '@/data/portfolioData';
 import TiltedCard from '../components/custom/TiltedCard';
 import { useSpotify } from '@/hooks/useSpotify';
 
 const Index = () => {
   const { data: spotifyData, isLoading: spotifyLoading } = useSpotify();
-  // [F8] project sheet state
-  const [activeProject, setActiveProject] = useState<RoleCardData | null>(null);
-  const closeProject = useCallback(() => setActiveProject(null), []);
 
   const getSpotifyText = () => {
     // [F6] shimmer while the first fetch is in flight
@@ -59,8 +54,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-100">
-      {/* [F8] main dims/blurs while a project sheet is open */}
-      <main className={cn('max-w-3xl mx-auto px-6 py-6 space-y-16 cover-target', activeProject && 'is-covered')}>
+      <main className="max-w-3xl mx-auto px-6 py-6 space-y-16">
         {/* Introduction */}
         <section className="mb-8">
           <div className="mb-6">
@@ -117,14 +111,13 @@ const Index = () => {
         <section>
           <SectionTitle title="Projects" />
           
-          {/* [F8] click → detail sheet instead of accordion */}
+          {/* [F8] reverted: same expand as Work Experience */}
           <div className="space-y-2" data-fb="F8">
             {projects.map((project, index) => (
               <RoleCard 
                 key={`${project.title ?? 'project'}-${project.year ?? index}`}
                 className="row-in"
                 style={{ '--row': index } as CSSProperties}
-                onSelect={() => setActiveProject(project)}
                 logo={project.logo}
                 title={project.title}
                 description={project.description}
@@ -169,7 +162,6 @@ const Index = () => {
           </div>
         </section>
       </main>
-      <ProjectSheet project={activeProject} onClose={closeProject} />
     </div>
   );
 };

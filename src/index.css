@@ -207,29 +207,6 @@
     animation: popup-in 0.16s var(--ease-pop) both;
   }
 
-  /* [F8] detail sheet + cover blur on the content behind it */
-  .sheet-in {
-    animation: sheet-in 0.28s var(--ease-morph) 60ms both;
-  }
-  .sheet-out {
-    animation: sheet-out 0.18s var(--ease-out) both;
-  }
-  .scrim-in {
-    animation: fade-in 0.2s var(--ease-out) both;
-  }
-  .scrim-out {
-    animation: fade-out 0.18s var(--ease-out) both;
-  }
-  .cover-target {
-    transform-origin: 50% 0;
-    transition: opacity 0.42s var(--ease-drawer), filter 0.42s var(--ease-drawer), scale 0.42s var(--ease-drawer);
-  }
-  .cover-target.is-covered {
-    opacity: 0.5;
-    filter: blur(2px);
-    scale: 0.975;
-  }
-
   /* [F9] hatch gutters + dashed frame on wide screens */
   .hatch-frame {
     background-color: hsl(var(--background));
@@ -240,8 +217,6 @@
     }
     .hatch-col {
       background-color: hsl(var(--background));
-      border-left: 1px dashed hsl(var(--foreground) / 0.18);
-      border-right: 1px dashed hsl(var(--foreground) / 0.18);
     }
   }
 }
@@ -256,12 +231,6 @@
 @keyframes popup-in {
   0% { opacity: 0; transform: scale(0.94) translateY(6px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-@keyframes sheet-in {
-  0% { opacity: 0; transform: translateX(10px); }
-}
-@keyframes sheet-out {
-  100% { opacity: 0; transform: translateX(10px); }
 }
 @keyframes fade-in {
   0% { opacity: 0; }
@@ -287,12 +256,10 @@
 
 /* [F10] reduced motion: every borrowed animation collapses to instant/fade */
 @media (prefers-reduced-motion: reduce) {
-  .row-in, .sheet-in, .sheet-out, .popup-in, .text-shimmer, .shimmer-block, .scrim-in, .scrim-out {
+  .row-in, .popup-in, .text-shimmer, .shimmer-block {
     animation: none !important;
   }
   .text-shimmer { color: hsl(var(--muted-foreground)); background: none; }
-  .cover-target { transition: none; }
-  .cover-target.is-covered { filter: none; scale: 1; }
   .pressable:active { scale: 1; }
   ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }
