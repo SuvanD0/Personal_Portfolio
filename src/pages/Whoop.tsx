@@ -62,7 +62,6 @@ function FitnessSection({
   strain,
   trendRecovery,
   trendStrain,
-  trendHrv,
   dates,
   strainDates,
   sage,
@@ -72,24 +71,11 @@ function FitnessSection({
   strain: number | null;
   trendRecovery: number[];
   trendStrain: number[];
-  trendHrv: number[];
   dates: string[];
   strainDates: string[];
   sage: string;
   loading: boolean;
 }) {
-  const insight = (() => {
-    if (trendHrv.length < 8) return null;
-    const latest = trendHrv[trendHrv.length - 1];
-    const prior = avg(trendHrv.slice(-8, -1));
-    if (latest == null || prior == null) return null;
-    const delta = latest - prior;
-    const pct = (delta / prior) * 100;
-    if (Math.abs(pct) < 2) return 'HRV holding steady vs last week';
-    const sign = delta > 0 ? '+' : '−';
-    return `HRV ${sign}${Math.abs(Math.round(pct))}% vs 7-day average`;
-  })();
-
   // [H2] zone bands behind the recovery line
   // middle zone stays clear so the chart doesn't read as a tinted block
   const bands: SparkBand[] = [
@@ -132,7 +118,6 @@ function FitnessSection({
         </div>
 
         <div className="flex gap-6 mb-1 row-in" style={{ '--row': 24 } as CSSProperties}>
-          <Metric label="HRV" value={recovery?.hrv ?? null} suffix=" ms" loading={loading} />
           <Metric label="Strain" value={strain} decimals={1} loading={loading} />
         </div>
       </div>
@@ -181,7 +166,6 @@ function FitnessSection({
         </>
       )}
 
-      {insight && <Insight data-fb="H7">{insight}</Insight>}
     </article>
   );
 }
@@ -200,7 +184,6 @@ function SleepSection({
   performance,
   stages,
   trendSleep,
-  dates,
   sleepDate,
   sage,
   loading,
@@ -209,7 +192,6 @@ function SleepSection({
   performance: number | null;
   stages: { light: number; rem: number; sws: number; awake: number } | null;
   trendSleep: number[];
-  dates: string[];
   sleepDate?: string | null;
   sage: string;
   loading: boolean;
@@ -309,25 +291,8 @@ function SleepSection({
         </div>
       )}
 
-      <div className="mb-3">
-        {loading ? (
-          <Skeleton className="h-[60px] w-full" />
-        ) : (
-          <Sparkline
-            values={trendSleep}
-            dates={dates}
-            color={sage}
-            height={60}
-            formatValue={(v) => fmtMins(Math.round(v))}
-            className="w-full h-[60px]"
-          />
-        )}
-      </div>
-      <p className="text-[11px] text-muted-foreground/70 mb-5">
-        Sleep duration · last 30 days
-      </p>
-
-      {insight && <Insight>{insight}</Insight>}
+      {/* [H5] round 2: no 30-day sleep line, weekly average is enough */}
+      {insight && <Insight data-fb="H7">{insight}</Insight>}
     </article>
   );
 }
@@ -397,9 +362,7 @@ export default function Whoop() {
   const recoveryDates = (data?.trends?.recovery ?? []).map((p) => p.date);
   const trendStrain = (data?.trends?.strain ?? []).map((p) => p.score);
   const strainDates = (data?.trends?.strain ?? []).map((p) => p.date);
-  const trendHrv = (data?.trends?.hrv ?? []).map((p) => p.value);
   const trendSleep = (data?.trends?.sleep ?? []).map((p) => p.minutes);
-  const sleepDates = (data?.trends?.sleep ?? []).map((p) => p.date);
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-100">
@@ -410,7 +373,6 @@ export default function Whoop() {
           strain={data?.strain?.score ?? null}
           trendRecovery={trendRecovery}
           trendStrain={trendStrain}
-          trendHrv={trendHrv}
           dates={recoveryDates}
           strainDates={strainDates}
           sage={sage}
@@ -421,7 +383,6 @@ export default function Whoop() {
           performance={data?.sleep?.performance ?? null}
           stages={data?.sleep?.stages ?? null}
           trendSleep={trendSleep}
-          dates={sleepDates}
           sleepDate={data?.sleep?.date}
           sage={sage}
           loading={isLoading}

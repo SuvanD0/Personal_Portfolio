@@ -22,6 +22,9 @@ const ARTISTS = [
   ['Radiohead', 2140], ['Elliott Smith', 1820], ['Peter Cat Recording Co.', 1510],
   ['Nick Drake', 1275], ['Taylor Swift', 1190], ['Vampire Weekend', 1044],
   ['The Alchemist', 980], ['Black Box Recorder', 612], ['Big Thief', 540], ['MF DOOM', 498],
+  ['Bon Iver', 471], ['Frank Ocean', 455], ['Sufjan Stevens', 402], ['Alex G', 388],
+  ['Phoebe Bridgers', 361], ['Earl Sweatshirt', 340], ['The Smiths', 322], ['Mitski', 301],
+  ['Steely Dan', 288], ['Mk.gee', 265],
 ] as const;
 
 const TRACKS: [string, string, string, number, number][] = [

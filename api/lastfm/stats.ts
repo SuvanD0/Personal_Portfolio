@@ -28,7 +28,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const [artistsRes, tracksRes] = await Promise.all([
-      lfm('user.getTopArtists', { period: 'overall', limit: '10' }),
+      lfm('user.getTopArtists', { period: 'overall', limit: '20' }),
       lfm('user.getTopTracks', { period: 'overall', limit: '10' }),
     ]);
 

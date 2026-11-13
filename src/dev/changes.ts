@@ -37,10 +37,10 @@ export const CHANGES: ChangeEntry[] = [
   { id: 'H4', title: 'Hero count-up + late unit/zone', where: '/whoop · 66%',
     note: 'Quint curve; "%" and zone label land after the number.' },
   { id: 'H5', title: 'Segmented sleep bar', where: '/whoop · Sleep',
-    note: 'Segments lift on hover with tooltip; labels under their own segment.' },
+    note: 'Round 2: 30-day sleep line removed; weekly average kept.' },
   { id: 'H6', title: '"as of" timestamps', where: '/whoop · section headers' },
-  { id: 'H7', title: 'Insight callout', where: '/whoop · italic lines',
-    note: 'Dashed left rule + sage dot.' },
+  { id: 'H7', title: 'Insight callout', where: '/whoop · sleep average',
+    note: 'Round 2: HRV metric + HRV insight removed entirely.' },
 
   // ── /stats ──
   { id: 'M1', title: 'Heatmap first + stat row', where: '/stats · top',
@@ -48,7 +48,7 @@ export const CHANGES: ChangeEntry[] = [
   { id: 'M2', title: 'Heatmap cell lift', where: '/stats · heat grid',
     note: 'Cell scales 1.4 on hover, quint curve.' },
   { id: 'M3', title: 'Artist flow restyled', where: '/stats · Top Artists',
-    note: 'Rank-scaled sizes, only #1 in sage, play counts as superscript.' },
+    note: 'Round 2: top 20, sizes taper to text-sm.' },
   { id: 'M4', title: 'Track rows: stagger, cover lift, play bar', where: '/stats · Top Tracks' },
   { id: 'M5', title: 'Now playing row', where: '/stats · top',
     note: 'Cover, title, artist, 3-bar equalizer when playing.' },

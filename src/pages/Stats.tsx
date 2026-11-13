@@ -67,7 +67,8 @@ function NowPlaying() {
 
 // ─── artist flow [M3] ─────────────────────────────────────────────────────────
 
-const RANK_SIZE = ['text-3xl', 'text-2xl', 'text-2xl', 'text-xl', 'text-xl', 'text-lg', 'text-lg', 'text-base', 'text-base', 'text-base'];
+// [M3] round 2: top 20, sizes taper by rank
+const RANK_SIZE = ['text-3xl', 'text-2xl', 'text-2xl', 'text-xl', 'text-xl', 'text-xl', 'text-lg', 'text-lg', 'text-lg', 'text-lg', 'text-base', 'text-base', 'text-base', 'text-base', 'text-base', 'text-sm', 'text-sm', 'text-sm', 'text-sm', 'text-sm'];
 
 function ArtistFlow({ artists }: { artists: SpotifyArtist[] }) {
   return (
@@ -80,7 +81,7 @@ function ArtistFlow({ artists }: { artists: SpotifyArtist[] }) {
             rel="noopener noreferrer"
             className={cn(
               'font-semibold transition-colors duration-150 ease-out hover:text-sage-moss',
-              RANK_SIZE[i] ?? 'text-base',
+              RANK_SIZE[i] ?? 'text-sm',
               i === 0 ? 'text-sage-moss' : 'text-foreground'
             )}
           >
