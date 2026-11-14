@@ -234,23 +234,6 @@
   .eq.paused > i { animation: none; height: 30%; opacity: 0.5; }
 }
 
-/* 404 page: hero crane bobs, flock drifts across */
-.crane-float {
-  animation: crane-float 5s ease-in-out infinite;
-}
-.crane-drift {
-  animation-name: crane-drift;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-@keyframes crane-float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-6px) rotate(-1deg); }
-}
-@keyframes crane-drift {
-  0% { transform: translateX(-8vw); }
-  100% { transform: translateX(108vw); }
-}
 @keyframes eq-bounce {
   0%, 100% { height: 30%; }
   50% { height: 100%; }
@@ -290,7 +273,7 @@
 
 /* [F10] reduced motion: every borrowed animation collapses to instant/fade */
 @media (prefers-reduced-motion: reduce) {
-  .row-in, .popup-in, .text-shimmer, .shimmer-block, .eq > i, .crane-float, .crane-drift {
+  .row-in, .popup-in, .text-shimmer, .shimmer-block, .eq > i {
     animation: none !important;
   }
   .text-shimmer { color: hsl(var(--muted-foreground)); background: none; }
